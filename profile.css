@@ -1,0 +1,238 @@
+/* ==================== PÁGINA DE PERFIL ==================== */
+.profile-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    min-height: calc(100vh - 300px); /* garante que a página tem altura minima */
+}
+
+/* ==================== HEADER DO PERFIL ==================== */
+.profile-header {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* avatar circular com gradiente azul */
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    min-width: 100px; /* garante que não encolhe */
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h1 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.profile-info p {
+    color: #888;
+    font-size: 1rem;
+}
+
+/* botão de logout vermelho */
+.profile-actions {
+    flex-shrink: 0;
+}
+
+.btn-logout {
+    background-color: #D96459;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.btn-logout:hover {
+    background-color: #c44d44;
+    transform: translateY(-2px);
+}
+
+/* ==================== CONTEÚDO DO PERFIL ==================== */
+.profile-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.profile-section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+    font-size: 1.5rem;
+}
+
+/* ==================== LISTA DE CURSOS ==================== */
+.cursos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.curso-item {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.curso-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.curso-info h3 {
+    color: #333;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+/* ==================== BARRA DE PROGRESSO ==================== */
+.progresso-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4A90E2 0%, #357ABD 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.progresso-texto {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* ==================== LISTA DE PALESTRAS ==================== */
+.palestras-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.palestra-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+.palestra-item:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px);
+}
+
+/* icon circular com play button */
+.palestra-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background-color: #D96459;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.palestra-info {
+    flex: 1;
+}
+
+.palestra-info h3 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.palestra-info span {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+    
+    /* header do perfil em mobile - coloca tudo em coluna */
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .profile-info h1 {
+        font-size: 1.5rem;
+    }
+    
+    /* conteúdo em coluna única no mobile */
+    .profile-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .profile-section {
+        padding: 1.5rem;
+    }
+    
+    .profile-section h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+    }
+    
+    .profile-avatar svg {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .btn-logout {
+        width: 100%;
+        text-align: center;
+    }
+}
