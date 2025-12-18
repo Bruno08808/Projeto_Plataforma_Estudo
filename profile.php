@@ -49,7 +49,7 @@ include 'header.php';
         </div>
         
         <div class="profile-actions">
-            <a href="logout.php" class="btn-logout">Sair</a>
+            <a href="login.php" class="btn-logout">Sair</a>
         </div>
     </div>
 
