@@ -19,10 +19,6 @@ $user_idade = $dados['Idade']; // Novo campo da tua BD
 $page_title = "StudyHub - Perfil";
 $page_css = "profile.css";
 
-// busca dados do user da session
-$user_name = $_SESSION['user_name'];
-$user_email = $_SESSION['user_email'];
-
 // dados de exemplo - depois vêm da BD
 $cursos_inscritos = [
     ['nome' => 'Matemática Avançada', 'progresso' => 65],
