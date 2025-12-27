@@ -75,4 +75,17 @@ function getDadosUtilizador($id) {
     $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+function getConteudoUtilizador($id_user, $tipo) {
+   $db = estabelecerConexao(); // Usa a ligação PDO existente
+   
+   $sql = "SELECT c.Titulo, c.Info_Extra, i.Progresso 
+           FROM Conteudo c
+           JOIN Inscricoes i ON c.IDconteudo = i.IDconteudo
+           WHERE i.IDuser = ? AND c.Tipo = ?";
+           
+   $stmt = $db->prepare($sql);
+   $stmt->execute([$id_user, $tipo]);
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>

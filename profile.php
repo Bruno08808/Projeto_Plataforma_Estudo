@@ -15,23 +15,14 @@ $user_idade = $dados['Idade']; // Novo campo da tua BD
 
 // ... resto do teu código de layout ...
 
-// define o título e CSS
-$page_title = "StudyHub - Perfil";
-$page_css = "profile.css";
+$id_logado = $_SESSION['user_id'];
+$dados_user = getDadosUtilizador($id_logado);
 
-// dados de exemplo - depois vêm da BD
-$cursos_inscritos = [
-    ['nome' => 'Matemática Avançada', 'progresso' => 65],
-    ['nome' => 'Programação Web', 'progresso' => 40],
-    ['nome' => 'Inglês Fluente', 'progresso' => 80]
-];
-
-$palestras_favoritas = [
-    ['nome' => 'Inteligência Artificial', 'duracao' => '45min'],
-    ['nome' => 'Gestão de Tempo', 'duracao' => '30min'],
-    ['nome' => 'Empreendedorismo', 'duracao' => '50min']
-];
-
+// BUSCA DADOS REAIS DA BASE DE DADOS (Substitui os arrays fixos)
+$cursos_inscritos = getConteudoUtilizador($id_logado, 'curso');
+$palestras_favoritas = getConteudoUtilizador($id_logado, 'palestra');
+$reunioes = getConteudoUtilizador($id_logado, 'reuniao');
+$ebooks = getConteudoUtilizador($id_logado, 'ebook');
 // inclui o header
 include 'header.php';
 ?>
@@ -54,7 +45,7 @@ include 'header.php';
         </div>
         
         <div class="profile-actions">
-            <a href="login.php" class="btn-logout">Sair</a>
+            <a href="logout.php" class="btn-logout">Sair</a>
         </div>
     </div>
 
