@@ -1,46 +1,74 @@
 <?php 
-// Estabelecer conexão com a base de dados
+
+/**
+ * Estabelece a conexão PDO com a base de dados na Hostinger
+ */
 function estabelecerConexao() {
+   // Dados corrigidos conforme as capturas de ecrã
    $hostname = 'localhost';
-   $dbname = 'u506280443_bruevaDB';
-   $username = 'u50628443_bruevadbUser';
-   $password = 'kZumpy6&';
+   $dbname = 'u506280443_bruevaDB'; //
+   $username = 'u506280443_bruevadbUser'; // Adicionado o '0' que faltava
+   $password = 'kZumpy6&'; //
 
    try {
       $conexao = new PDO("mysql:host=$hostname;dbname=$dbname;charset=utf8mb4", $username, $password);
+      // Configura o PDO para lançar exceções em caso de erro
       $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $conexao;
    } catch(PDOException $e) {
+      // Se houver erro de credenciais, ele será exibido aqui
       die("Erro de ligação: " . $e->getMessage());
    }
 }
 
-
-// Verifica se o login é válido
+/**
+ * Verifica se as credenciais de login são válidas
+ */
 function verificarLogin($email, $password) {
     $db = estabelecerConexao();
-    // Procuramos o utilizador pelo email
+    // Nome da tabela 'Utilizador' com 'U' maiúsculo conforme a BD
     $stmt = $db->prepare("SELECT IDuser, Password, Nome FROM Utilizador WHERE Email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Se o user existir, verificamos a password (usando hash para segurança)
+    // Verifica a password usando hash por segurança
     if ($user && password_verify($password, $user['Password'])) {
         return $user;
     }
     return false;
 }
 
-// Regista um novo utilizador
-function adicionarUtilizador($nome, $email, $idade, $password) {
+/**
+ * Verifica se um email já está registado na base de dados
+ */
+function emailExiste($email) {
     $db = estabelecerConexao();
-    $hash = password_hash($password, PASSWORD_DEFAULT); // Nunca guardar texto limpo!
+    $stmt = $db->prepare("SELECT IDuser FROM Utilizador WHERE Email = ?");
+    $stmt->execute([$email]);
+    return $stmt->fetch() ? true : false;
+}
+
+/**
+ * Insere um novo utilizador na tabela Utilizador
+ */
+function adicionarUtilizador($nome, $email, $idade, $password) {
+    // Primeiro verifica se o email já existe para não dar erro de duplicado
+    if (emailExiste($email)) {
+        return false;
+    }
+
+    $db = estabelecerConexao();
+    // Transforma a password em hash antes de guardar
+    $hash = password_hash($password, PASSWORD_DEFAULT);
     
+    // Colunas: Nome, Email, Idade, Password conforme a captura
     $stmt = $db->prepare("INSERT INTO Utilizador (Nome, Email, Idade, Password) VALUES (?, ?, ?, ?)");
     return $stmt->execute([$nome, $email, $idade, $hash]);
 }
 
-// Vai buscar os dados para o Perfil
+/**
+ * Recupera todos os dados de um utilizador específico para a página de perfil
+ */
 function getDadosUtilizador($id) {
     $db = estabelecerConexao();
     $stmt = $db->prepare("SELECT Nome, Email, Idade FROM Utilizador WHERE IDuser = ?");
