@@ -1,9 +1,9 @@
 /* ==================== PÁGINA DE PERFIL ==================== */
 .profile-container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
-    min-height: calc(100vh - 300px); /* garante que a página tem altura minima */
+    min-height: calc(100vh - 300px);
 }
 
 /* ==================== HEADER DO PERFIL ==================== */
@@ -18,11 +18,10 @@
     margin-bottom: 2rem;
 }
 
-/* avatar circular com gradiente azul */
 .profile-avatar {
     width: 100px;
     height: 100px;
-    min-width: 100px; /* garante que não encolhe */
+    min-width: 100px;
     border-radius: 50%;
     background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
     display: flex;
@@ -45,9 +44,14 @@
 .profile-info p {
     color: #888;
     font-size: 1rem;
+    margin-bottom: 0.3rem;
 }
 
-/* botão de logout vermelho */
+.profile-info .user-idade {
+    color: #666;
+    font-size: 0.9rem;
+}
+
 .profile-actions {
     flex-shrink: 0;
 }
@@ -70,7 +74,7 @@
 /* ==================== CONTEÚDO DO PERFIL ==================== */
 .profile-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
 }
 
@@ -79,6 +83,7 @@
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-height: 250px;
 }
 
 .profile-section h2 {
@@ -87,6 +92,43 @@
     padding-bottom: 1rem;
     border-bottom: 2px solid #eee;
     font-size: 1.5rem;
+}
+
+/* ==================== ESTADO VAZIO ==================== */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #999;
+}
+
+.empty-state svg {
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #888;
+}
+
+.btn-explore {
+    background-color: #4A90E2;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-explore:hover {
+    background-color: #357ABD;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(74, 144, 226, 0.3);
 }
 
 /* ==================== LISTA DE CURSOS ==================== */
@@ -112,7 +154,6 @@
     font-size: 1.1rem;
 }
 
-/* ==================== BARRA DE PROGRESSO ==================== */
 .progresso-bar {
     width: 100%;
     height: 10px;
@@ -157,7 +198,6 @@
     transform: translateX(5px);
 }
 
-/* icon circular com play button */
 .palestra-icon {
     width: 45px;
     height: 45px;
@@ -186,6 +226,108 @@
     font-size: 0.9rem;
 }
 
+/* ==================== LISTA DE EBOOKS ==================== */
+.ebooks-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ebook-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+.ebook-item:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px);
+}
+
+.ebook-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background-color: #5FA777;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.ebook-info {
+    flex: 1;
+}
+
+.ebook-info h3 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.ebook-info span {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* ==================== LISTA DE REUNIÕES ==================== */
+.reunioes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.reuniao-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+.reuniao-item:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px);
+}
+
+.reuniao-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background-color: #E89A3C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.reuniao-info {
+    flex: 1;
+}
+
+.reuniao-info h3 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.reuniao-info span {
+    color: #888;
+    font-size: 0.9rem;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     .profile-container {
@@ -193,7 +335,6 @@
         margin: 1rem auto;
     }
     
-    /* header do perfil em mobile - coloca tudo em coluna */
     .profile-header {
         flex-direction: column;
         text-align: center;
@@ -204,7 +345,6 @@
         font-size: 1.5rem;
     }
     
-    /* conteúdo em coluna única no mobile */
     .profile-content {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -234,5 +374,14 @@
     .btn-logout {
         width: 100%;
         text-align: center;
+    }
+    
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+    
+    .empty-state svg {
+        width: 50px;
+        height: 50px;
     }
 }
