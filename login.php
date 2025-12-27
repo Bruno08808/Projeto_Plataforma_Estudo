@@ -1,17 +1,21 @@
 <?php
-// inicia session
 session_start();
+include 'model.php'; // Incluímos as funções da BD
 
-// se clicar no botão de login, cria session e vai pro perfil
 if(isset($_POST['login'])) {
-    // cria dados fake na session
-    $_SESSION['user_id'] = 1;
-    $_SESSION['user_name'] = "João Silva";
-    $_SESSION['user_email'] = "joao@email.com";
+    $email = $_POST['email'];
+    $password = $_POST['password'];
     
-    // vai pra página de perfil
-    header("Location: profile.php");
-    exit();
+    $user = verificarLogin($email, $password);
+    
+    if($user) {
+        // Guardamos o ID real vindo da base de dados
+        $_SESSION['user_id'] = $user['IDuser'];
+        header("Location: profile.php");
+        exit();
+    } else {
+        $erro = "Email ou password incorretos!";
+    }
 }
 ?>
 

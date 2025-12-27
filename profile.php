@@ -1,10 +1,19 @@
 <?php
-// verifica se tá logado
 session_start();
+include 'model.php';
+
 if(!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
+// Busca os dados REAIS do utilizador logado
+$dados = getDadosUtilizador($_SESSION['user_id']);
+$user_name = $dados['Nome'];
+$user_email = $dados['Email'];
+$user_idade = $dados['Idade']; // Novo campo da tua BD
+
+// ... resto do teu código de layout ...
 
 // define o título e CSS
 $page_title = "StudyHub - Perfil";
