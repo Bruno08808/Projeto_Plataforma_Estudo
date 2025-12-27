@@ -18,7 +18,7 @@ $id_logado = $_SESSION['user_id'];
 // BUSCA DADOS REAIS DA BASE DE DADOS
 $cursos_inscritos = getConteudoUtilizador($id_logado, 'curso');
 $palestras_favoritas = getConteudoUtilizador($id_logado, 'palestra');
-$reunioes = getConteudoUtilizador($id_logado, 'reuniao');
+$explicacoes = getConteudoUtilizador($id_logado, 'explicacao');
 $ebooks = getConteudoUtilizador($id_logado, 'ebook');
 
 // inclui o header
@@ -156,12 +156,12 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- ==================== SECÇÃO DAS REUNIÕES ==================== -->
+        <!-- ==================== SECÇÃO DAS Explicacoes ==================== -->
         <div class="profile-section">
-            <h2>Minhas Reuniões</h2>
-            <div class="reunioes-lista">
-                <?php if(empty($reunioes)): ?>
-                    <!-- mensagem quando não há reuniões -->
+            <h2>Minhas Explicações</h2>
+            <div class="Explicações-lista">
+                <?php if(empty($explicacoes)): ?>
+                    <!-- mensagem quando não há Explicacoes -->
                     <div class="empty-state">
                         <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -169,14 +169,14 @@ include 'header.php';
                             <line x1="8" y1="2" x2="8" y2="6"></line>
                             <line x1="3" y1="10" x2="21" y2="10"></line>
                         </svg>
-                        <p>Não tens reuniões agendadas</p>
-                        <a href="explicacoes.php" class="btn-explore">Agendar Reunião</a>
+                        <p>Não tens explicacoes agendadas</p>
+                        <a href="explicacoes.php" class="btn-explore">Agendar Explicações</a>
                     </div>
                 <?php else: ?>
-                    <!-- mostra as reuniões quando existem -->
-                    <?php foreach($reunioes as $reuniao): ?>
-                        <div class="reuniao-item">
-                            <div class="reuniao-icon">
+                    <!-- mostra as explicacao quando existem -->
+                    <?php foreach($explicacoes as $explicacao): ?>
+                        <div class="explicacao-item">
+                            <div class="explicacao-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                                     <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -184,10 +184,10 @@ include 'header.php';
                                     <line x1="3" y1="10" x2="21" y2="10"></line>
                                 </svg>
                             </div>
-                            <div class="reuniao-info">
-                                <h3><?php echo htmlspecialchars($reuniao['nome']); ?></h3>
-                                <?php if(isset($reuniao['data'])): ?>
-                                    <span><?php echo htmlspecialchars($reuniao['data']); ?></span>
+                            <div class="explicacao-info">
+                                <h3><?php echo htmlspecialchars($explicacao['nome']); ?></h3>
+                                <?php if(isset($explicacao['data'])): ?>
+                                    <span><?php echo htmlspecialchars($explicacao['data']); ?></span>
                                 <?php endif; ?>
                             </div>
                         </div>
