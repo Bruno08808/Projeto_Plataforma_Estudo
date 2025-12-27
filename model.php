@@ -77,15 +77,25 @@ function getDadosUtilizador($id) {
 }
 
 function getConteudoUtilizador($id_user, $tipo) {
-   $db = estabelecerConexao(); // Usa a ligação PDO existente
+   $db = estabelecerConexao();
    
-   $sql = "SELECT c.Titulo, c.Info_Extra, i.Progresso 
+   // IMPORTANTE: Usamos 'AS nome' para que o PHP encontre a chave que o teu HTML pede
+   $sql = "SELECT c.Titulo AS nome, c.Info_Extra, i.Progresso AS progresso 
            FROM Conteudo c
            JOIN Inscricoes i ON c.IDconteudo = i.IDconteudo
            WHERE i.IDuser = ? AND c.Tipo = ?";
            
    $stmt = $db->prepare($sql);
    $stmt->execute([$id_user, $tipo]);
-   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+   $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+   // Mapeamos a coluna Info_Extra para as variáveis que usaste no profile.php
+   foreach ($resultados as &$item) {
+       $item['duracao'] = $item['Info_Extra']; // Para palestras
+       $item['autor']   = $item['Info_Extra']; // Para ebooks
+       $item['data']    = $item['Info_Extra']; // Para explicacoes
+   }
+   
+   return $resultados;
 }
 ?>
