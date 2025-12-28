@@ -1,0 +1,228 @@
+<?php
+$page_title = "StudyHub - Palestras";
+$page_css = "palestras.css";
+session_start();
+include 'header.php';
+?>
+
+<!-- HERO PALESTRAS -->
+<section class="hero-palestras">
+    <div class="hero-content">
+        <h1>Palestras Inspiradoras</h1>
+        <p>Aprende com especialistas de todo o mundo</p>
+    </div>
+</section>
+
+<!-- TABS CATEGORIAS -->
+<section class="tabs-section">
+    <div class="container">
+        <div class="tabs-wrapper">
+            <button class="tab-item active" data-tab="todas">Todas</button>
+            <button class="tab-item" data-tab="tecnologia">Tecnologia</button>
+            <button class="tab-item" data-tab="negocios">Negócios</button>
+            <button class="tab-item" data-tab="motivacao">Motivação</button>
+            <button class="tab-item" data-tab="saude">Saúde</button>
+        </div>
+    </div>
+</section>
+
+<!-- PALESTRAS EM DESTAQUE -->
+<section class="palestras-destaque">
+    <div class="container">
+        <h2>🔥 Em Destaque</h2>
+        <div class="palestra-featured">
+            <div class="featured-video">
+                <img src="https://via.placeholder.com/800x450" alt="Palestra">
+                <div class="play-button">▶</div>
+                <span class="duracao-badge">1h 15min</span>
+            </div>
+            <div class="featured-info">
+                <span class="categoria-badge">Tecnologia</span>
+                <h3>O Futuro da Inteligência Artificial</h3>
+                <p class="palestrante">👤 Dr. Miguel Santos • Google AI</p>
+                <p class="descricao">Uma visão profunda sobre como a IA vai transformar todas as indústrias nos próximos 10 anos. Descobre as tendências, desafios e oportunidades que nos esperam.</p>
+                <div class="stats-row">
+                    <span>👁️ 25k visualizações</span>
+                    <span>⭐ 4.9 (342 avaliações)</span>
+                    <span>📅 Há 2 dias</span>
+                </div>
+                <button class="btn-assistir">▶ Assistir Agora</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GRID DE PALESTRAS -->
+<section class="palestras-grid-section">
+    <div class="container">
+        <h2>Todas as Palestras</h2>
+        <div class="palestras-grid">
+            
+            <!-- Palestra 1 -->
+            <div class="palestra-card" data-categoria="negocios">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">45min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge negocios">Negócios</span>
+                    <h3>Como Escalar uma Startup</h3>
+                    <p class="speaker">Ana Costa • CEO Startup Inc</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 12k</span>
+                        <span>⭐ 4.8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palestra 2 -->
+            <div class="palestra-card" data-categoria="motivacao">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">32min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge motivacao">Motivação</span>
+                    <h3>Supera os Teus Limites</h3>
+                    <p class="speaker">João Silva • Coach Motivacional</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 18k</span>
+                        <span>⭐ 5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palestra 3 -->
+            <div class="palestra-card" data-categoria="tecnologia">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">50min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge tecnologia">Tecnologia</span>
+                    <h3>Blockchain Explicado</h3>
+                    <p class="speaker">Pedro Alves • Engenheiro Blockchain</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 9k</span>
+                        <span>⭐ 4.7</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palestra 4 -->
+            <div class="palestra-card" data-categoria="saude">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">38min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge saude">Saúde</span>
+                    <h3>Mindfulness no Dia a Dia</h3>
+                    <p class="speaker">Rita Santos • Psicóloga Clínica</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 15k</span>
+                        <span>⭐ 4.9</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palestra 5 -->
+            <div class="palestra-card" data-categoria="tecnologia">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">55min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge tecnologia">Tecnologia</span>
+                    <h3>Cibersegurança em 2024</h3>
+                    <p class="speaker">Carlos Mendes • Especialista Segurança</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 11k</span>
+                        <span>⭐ 4.8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palestra 6 -->
+            <div class="palestra-card" data-categoria="negocios">
+                <div class="palestra-thumb">
+                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
+                    <div class="play-overlay">▶</div>
+                    <span class="duracao">42min</span>
+                </div>
+                <div class="palestra-content">
+                    <span class="cat-badge negocios">Negócios</span>
+                    <h3>Liderança 4.0</h3>
+                    <p class="speaker">Maria Oliveira • Consultora Empresarial</p>
+                    <div class="palestra-stats">
+                        <span>👁️ 13k</span>
+                        <span>⭐ 4.9</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- PRÓXIMAS PALESTRAS LIVE -->
+<section class="proximas-lives">
+    <div class="container">
+        <h2>📅 Próximas Palestras ao Vivo</h2>
+        <div class="lives-grid">
+            <div class="live-card">
+                <div class="live-badge">🔴 LIVE</div>
+                <h3>Workshop de Python</h3>
+                <p class="live-speaker">Prof. João Costa</p>
+                <p class="live-data">📅 25 Dez • 15:00</p>
+                <button class="btn-participar">Participar</button>
+            </div>
+            <div class="live-card">
+                <div class="live-badge upcoming">📌 Em breve</div>
+                <h3>Marketing Digital 2024</h3>
+                <p class="live-speaker">Ana Silva</p>
+                <p class="live-data">📅 28 Dez • 18:30</p>
+                <button class="btn-participar">Registar</button>
+            </div>
+            <div class="live-card">
+                <div class="live-badge upcoming">📌 Em breve</div>
+                <h3>Produtividade Extrema</h3>
+                <p class="live-speaker">Pedro Santos</p>
+                <p class="live-data">📅 30 Dez • 14:00</p>
+                <button class="btn-participar">Registar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// sistema de tabs
+document.querySelectorAll('.tab-item').forEach(tab => {
+    tab.addEventListener('click', function() {
+        // remove active de todas
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        // adiciona active na clicada
+        this.classList.add('active');
+        
+        const categoria = this.dataset.tab;
+        
+        // filtra palestras
+        document.querySelectorAll('.palestra-card').forEach(card => {
+            if(categoria === 'todas' || card.dataset.categoria === categoria) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
+<?php
+include 'footer.php';
+?>

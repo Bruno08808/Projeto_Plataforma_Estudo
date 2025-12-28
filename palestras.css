@@ -1,0 +1,425 @@
+/* HERO PALESTRAS */
+.hero-palestras {
+    background: linear-gradient(135deg, #D96459 0%, #c44d44 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.hero-palestras h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+}
+
+.hero-palestras p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+/* TABS */
+.tabs-section {
+    background: white;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+}
+
+.tabs-wrapper {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tab-item {
+    padding: 0.8rem 1.8rem;
+    background: transparent;
+    border: 2px solid #D96459;
+    color: #D96459;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.tab-item:hover,
+.tab-item.active {
+    background: #D96459;
+    color: white;
+}
+
+/* PALESTRA EM DESTAQUE */
+.palestras-destaque {
+    padding: 4rem 2rem;
+    background: #f5f5f5;
+}
+
+.palestras-destaque h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.palestra-featured {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+}
+
+.featured-video {
+    position: relative;
+    cursor: pointer;
+}
+
+.featured-video img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(217, 100, 89, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    transition: all 0.3s;
+}
+
+.featured-video:hover .play-button {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(217, 100, 89, 1);
+}
+
+.duracao-badge {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.featured-info {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.categoria-badge {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: #D96459;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    width: fit-content;
+}
+
+.featured-info h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.palestrante {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.descricao {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.stats-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-assistir {
+    padding: 1rem 2rem;
+    background: #D96459;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-assistir:hover {
+    background: #c44d44;
+    transform: scale(1.05);
+}
+
+/* GRID DE PALESTRAS */
+.palestras-grid-section {
+    padding: 4rem 2rem;
+    background: white;
+}
+
+.palestras-grid-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.palestras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.palestra-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.palestra-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.palestra-thumb {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: #000;
+}
+
+.palestra-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.palestra-card:hover .palestra-thumb img {
+    transform: scale(1.05);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(217, 100, 89, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.duracao {
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.3rem 0.7rem;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.palestra-content {
+    padding: 1.2rem;
+}
+
+.cat-badge {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.cat-badge.tecnologia {
+    background: #4A90E2;
+    color: white;
+}
+
+.cat-badge.negocios {
+    background: #E89A3C;
+    color: white;
+}
+
+.cat-badge.motivacao {
+    background: #9B59B6;
+    color: white;
+}
+
+.cat-badge.saude {
+    background: #5FA777;
+    color: white;
+}
+
+.palestra-content h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.speaker {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.palestra-stats {
+    display: flex;
+    gap: 1rem;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* PRÓXIMAS LIVES */
+.proximas-lives {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.proximas-lives h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+}
+
+.lives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.live-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    position: relative;
+}
+
+.live-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    background: #D96459;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.live-badge.upcoming {
+    background: #888;
+}
+
+.live-card h3 {
+    color: #333;
+    margin: 1.5rem 0 0.5rem;
+    font-size: 1.3rem;
+}
+
+.live-speaker {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.live-data {
+    color: #888;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-participar {
+    width: 100%;
+    padding: 0.9rem;
+    background: #D96459;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-participar:hover {
+    background: #c44d44;
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 968px) {
+    .palestra-featured {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-palestras h1 {
+        font-size: 2rem;
+    }
+    
+    .tabs-wrapper {
+        gap: 0.5rem;
+    }
+    
+    .tab-item {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .palestras-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-info h3 {
+        font-size: 1.4rem;
+    }
+}
