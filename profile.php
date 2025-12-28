@@ -29,7 +29,7 @@ $id_logado = $_SESSION['user_id'];
 $cursos_inscritos     = getConteudoUtilizador($id_logado, 'curso');
 $palestras_favoritas  = getConteudoUtilizador($id_logado, 'palestra');
 $ebooks               = getConteudoUtilizador($id_logado, 'ebook');
-$explicacoes          = getConteudoUtilizador($id_logado, 'explicacao');
+$explicacoes          = getConteudoUtilizador($id_logado, 'explicacoes');
 
 /* ================= HEADER ================= */
 
