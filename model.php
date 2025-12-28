@@ -1,37 +1,36 @@
 <?php 
 
 /**
- * Estabelece a conexão PDO com a base de dados na Hostinger
+ * ESTABELECER CONEXÃO
+ * Conecta o PHP à base de dados MySQL na Hostinger usando PDO.
  */
 function estabelecerConexao() {
-   // Dados corrigidos conforme as capturas de ecrã
    $hostname = 'localhost';
-   $dbname = 'u506280443_bruevaDB'; //
-   $username = 'u506280443_bruevadbUser'; // Adicionado o '0' que faltava
-   $password = 'kZumpy6&'; //
+   $dbname   = 'u506280443_bruevaDB'; 
+   $username = 'u506280443_bruevadbUser'; 
+   $password = 'kZumpy6&'; 
 
    try {
       $conexao = new PDO("mysql:host=$hostname;dbname=$dbname;charset=utf8mb4", $username, $password);
-      // Configura o PDO para lançar exceções em caso de erro
+      // Ativa o modo de erro para avisar se houver algo errado nas tabelas
       $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $conexao;
    } catch(PDOException $e) {
-      // Se houver erro de credenciais, ele será exibido aqui
-      die("Erro de ligação: " . $e->getMessage());
+      die("Erro Crítico de Ligação: " . $e->getMessage());
    }
 }
 
 /**
- * Verifica se as credenciais de login são válidas
+ * LOGIN
+ * Verifica se o email e a password (encriptada) coincidem.
  */
 function verificarLogin($email, $password) {
     $db = estabelecerConexao();
-    // Nome da tabela 'Utilizador' com 'U' maiúsculo conforme a BD
     $stmt = $db->prepare("SELECT IDuser, Password, Nome FROM Utilizador WHERE Email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Verifica a password usando hash por segurança
+    // Compara a password escrita com o hash guardado na BD
     if ($user && password_verify($password, $user['Password'])) {
         return $user;
     }
@@ -39,35 +38,25 @@ function verificarLogin($email, $password) {
 }
 
 /**
- * Verifica se um email já está registado na base de dados
- */
-function emailExiste($email) {
-    $db = estabelecerConexao();
-    $stmt = $db->prepare("SELECT IDuser FROM Utilizador WHERE Email = ?");
-    $stmt->execute([$email]);
-    return $stmt->fetch() ? true : false;
-}
-
-/**
- * Insere um novo utilizador na tabela Utilizador
+ * REGISTO
+ * Encripta a password e insere um novo utilizador.
  */
 function adicionarUtilizador($nome, $email, $idade, $password) {
-    // Primeiro verifica se o email já existe para não dar erro de duplicado
-    if (emailExiste($email)) {
-        return false;
-    }
-
     $db = estabelecerConexao();
-    // Transforma a password em hash antes de guardar
-    $hash = password_hash($password, PASSWORD_DEFAULT);
     
-    // Colunas: Nome, Email, Idade, Password conforme a captura
+    // Verifica se o email já existe para evitar erro de duplicado
+    $check = $db->prepare("SELECT IDuser FROM Utilizador WHERE Email = ?");
+    $check->execute([$email]);
+    if($check->fetch()) return false;
+
+    $hash = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $db->prepare("INSERT INTO Utilizador (Nome, Email, Idade, Password) VALUES (?, ?, ?, ?)");
     return $stmt->execute([$nome, $email, $idade, $hash]);
 }
 
 /**
- * Recupera todos os dados de um utilizador específico para a página de perfil
+ * DADOS DO PERFIL
+ * Vai buscar Nome, Email e Idade do utilizador logado.
  */
 function getDadosUtilizador($id) {
     $db = estabelecerConexao();
@@ -76,10 +65,14 @@ function getDadosUtilizador($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+/**
+ * CONTEÚDO DINÂMICO (O teu erro estava aqui)
+ * Faz um JOIN entre a tabela Conteudo e Inscricoes.
+ * O 'AS nome' garante que o PHP encontra a chave certa para o HTML.
+ */
 function getConteudoUtilizador($id_user, $tipo) {
    $db = estabelecerConexao();
    
-   // IMPORTANTE: Usamos 'AS nome' para que o PHP encontre a chave que o teu HTML pede
    $sql = "SELECT c.Titulo AS nome, c.Info_Extra, i.Progresso AS progresso 
            FROM Conteudo c
            JOIN Inscricoes i ON c.IDconteudo = i.IDconteudo
@@ -89,11 +82,11 @@ function getConteudoUtilizador($id_user, $tipo) {
    $stmt->execute([$id_user, $tipo]);
    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-   // Mapeamos a coluna Info_Extra para as variáveis que usaste no profile.php
+   // Mapeia o campo Info_Extra para os nomes que usaste nas secções do Perfil
    foreach ($resultados as &$item) {
-       $item['duracao'] = $item['Info_Extra']; // Para palestras
-       $item['autor']   = $item['Info_Extra']; // Para ebooks
-       $item['data']    = $item['Info_Extra']; // Para explicacoes
+       $item['duracao'] = $item['Info_Extra']; // Para Palestras
+       $item['autor']   = $item['Info_Extra']; // Para Ebooks
+       $item['data']    = $item['Info_Extra']; // Para Explicações
    }
    
    return $resultados;
