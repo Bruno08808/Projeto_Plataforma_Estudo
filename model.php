@@ -69,22 +69,5 @@ function getConteudoUtilizador($idUser, $tipo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-/* ================= EXPLICAÇÕES ================= */
-
-// Para a página explicações.php
-function getTodasExplicacoes() {
-    $db = estabelecerConexao();
-    $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação'");
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Para a página explicações_detalhes.php
-function getExplicacaoPorID($id) {
-    $db = estabelecerConexao();
-    $stmt = $db->prepare("SELECT * FROM Conteudo WHERE IDconteudo = ?");
-    $stmt->execute([$id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
 ?>
