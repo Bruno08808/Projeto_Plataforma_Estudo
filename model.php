@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Estabelece a conexão PDO com a base de dados
- */
 function estabelecerConexao() {
    $hostname = 'localhost';
    $dbname = 'u506280443_bruevaDB'; 
@@ -56,7 +53,6 @@ function getDadosUtilizador($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// ESSENCIAL PARA O PERFIL: Sem esta função a página de perfil crasha
 function getConteudoUtilizador($idUser, $tipo) {
     $db = estabelecerConexao();
     $stmt = $db->prepare(
@@ -70,4 +66,19 @@ function getConteudoUtilizador($idUser, $tipo) {
 }
 
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Função para listar explicações na página de agendamento
+function getTodasExplicacoes() {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação'");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getExplicacaoPorID($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM Conteudo WHERE IDconteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>
