@@ -46,11 +46,15 @@ include 'header.php';
                             <h3><?php echo htmlspecialchars($curso['Titulo']); ?></h3>
                         </div>
                         <div class="card-body">
-                            <p><?php echo htmlspecialchars($curso['Info_Extra'] ?? 'Curso completo e prático'); ?></p>
-                            <div class="card-stats">
-                                <span>⭐ 4.8</span>
-                                <span>👥 2.5k alunos</span>
-                            </div>
+                            <?php if (!empty($curso['Info_Extra'])): ?>
+                                <p><?php echo htmlspecialchars($curso['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($curso['Avaliacao'])): ?>
+                                <div class="card-stats">
+                                    <span>⭐ <?php echo htmlspecialchars($curso['Avaliacao']); ?></span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -79,11 +83,15 @@ include 'header.php';
                             <h3><?php echo htmlspecialchars($palestra['Titulo']); ?></h3>
                         </div>
                         <div class="card-body">
-                            <p><?php echo htmlspecialchars($palestra['Info_Extra'] ?? 'Uma palestra inspiradora'); ?></p>
-                            <div class="card-stats">
-                                <span>👁️ 15k visualizações</span>
-                                <span>⏱️ 45min</span>
-                            </div>
+                            <?php if (!empty($palestra['Info_Extra'])): ?>
+                                <p><?php echo htmlspecialchars($palestra['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($palestra['Avaliacao'])): ?>
+                                <div class="card-stats">
+                                    <span>⭐ <?php echo htmlspecialchars($palestra['Avaliacao']); ?></span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -141,3 +149,19 @@ include 'header.php';
 // inclui o footer
 include 'footer.php';
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
