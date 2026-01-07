@@ -77,7 +77,7 @@ function getConteudoUtilizador($idUser, $tipo) {
     try {
         $db = estabelecerConexao();
         $stmt = $db->prepare(
-            "SELECT c.Titulo AS nome, c.Info_Extra AS info_extra, i.Progresso AS progresso, c.Slug
+            "SELECT c.Titulo AS nome, c.Info_Extra AS info_extra, i.Progresso AS progresso
              FROM Conteudo c
              JOIN Inscricoes i ON c.IDconteudo = i.IDconteudo
              WHERE i.IDuser = ? AND c.Tipo = ?"
@@ -97,18 +97,13 @@ function getConteudoUtilizador($idUser, $tipo) {
 }
 
 
-/* ================= LISTAGENS (AGORA COM JOIN NAS TABELAS FILHAS) ================= */
+/* ================= FUNÇÕES PARA LISTAR CONTEÚDOS ================= */
 
-// Buscar todos os cursos + detalhes
+// Buscar todos os cursos
 function getTodosCursos() {
     try {
         $db = estabelecerConexao();
-        $sql = "SELECT c.*, d.Data_Inicio, d.Vagas_Totais, d.Vagas_Preenchidas 
-                FROM Conteudo c 
-                LEFT JOIN Conteudo_Curso d ON c.IDconteudo = d.IDconteudo 
-                WHERE c.Tipo = 'Curso' 
-                ORDER BY c.IDconteudo DESC";
-        $stmt = $db->prepare($sql);
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Curso' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -117,16 +112,11 @@ function getTodosCursos() {
     }
 }
 
-// Buscar todas as palestras + detalhes
+// Buscar todas as palestras
 function getTodasPalestras() {
     try {
         $db = estabelecerConexao();
-        $sql = "SELECT c.*, d.Data_Evento, d.Localizacao, d.Orador
-                FROM Conteudo c 
-                LEFT JOIN Conteudo_Palestra d ON c.IDconteudo = d.IDconteudo 
-                WHERE c.Tipo = 'Palestra' 
-                ORDER BY c.IDconteudo DESC";
-        $stmt = $db->prepare($sql);
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Palestra' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -135,16 +125,11 @@ function getTodasPalestras() {
     }
 }
 
-// Buscar todos os ebooks + detalhes
+// Buscar todos os ebooks
 function getTodosEbooks() {
     try {
         $db = estabelecerConexao();
-        $sql = "SELECT c.*, d.Num_Paginas, d.Formato 
-                FROM Conteudo c 
-                LEFT JOIN Conteudo_Ebook d ON c.IDconteudo = d.IDconteudo 
-                WHERE c.Tipo = 'Ebook' 
-                ORDER BY c.IDconteudo DESC";
-        $stmt = $db->prepare($sql);
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Ebook' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -153,17 +138,11 @@ function getTodosEbooks() {
     }
 }
 
-// Buscar todas as explicações + detalhes
+// Buscar todas as explicações
 function getTodasExplicacoes() {
     try {
         $db = estabelecerConexao();
-        // Nota: Mantido 'Explicacoes' conforme a tua BD
-        $sql = "SELECT c.*, d.Duracao_Minutos, d.Nivel 
-                FROM Conteudo c 
-                LEFT JOIN Conteudo_Explicacao d ON c.IDconteudo = d.IDconteudo 
-                WHERE c.Tipo = 'Explicacoes' 
-                ORDER BY c.IDconteudo DESC";
-        $stmt = $db->prepare($sql);
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -172,53 +151,7 @@ function getTodasExplicacoes() {
     }
 }
 
-/* ================= NOVA FUNÇÃO: SINGLE PAGE (CONTEUDO.PHP) ================= */
-
-function getConteudoPorSlug($slug) {
-    try {
-        $db = estabelecerConexao();
-        
-        // 1. Primeiro descobre o tipo e os dados básicos
-        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Slug = ?");
-        $stmt->execute([$slug]);
-        $base = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$base) return false;
-
-        // 2. Baseado no tipo, vai buscar os detalhes à tabela correta
-        $detalhes = [];
-        $id = $base['IDconteudo'];
-        $tipo = $base['Tipo'];
-
-        if ($tipo == 'Curso') {
-            $stmt = $db->prepare("SELECT * FROM Conteudo_Curso WHERE IDconteudo = ?");
-        } elseif ($tipo == 'Ebook') {
-            $stmt = $db->prepare("SELECT * FROM Conteudo_Ebook WHERE IDconteudo = ?");
-        } elseif ($tipo == 'Palestra') {
-            $stmt = $db->prepare("SELECT * FROM Conteudo_Palestra WHERE IDconteudo = ?");
-        } elseif ($tipo == 'Explicacoes') {
-            $stmt = $db->prepare("SELECT * FROM Conteudo_Explicacao WHERE IDconteudo = ?");
-        } else {
-            return $base; // Se não tiver tabela extra, devolve só o base
-        }
-
-        $stmt->execute([$id]);
-        $extra = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Junta os dois arrays (Base + Detalhes)
-        if ($extra) {
-            return array_merge($base, $extra);
-        }
-        
-        return $base;
-
-    } catch(PDOException $e) {
-        error_log("Erro em getConteudoPorSlug: " . $e->getMessage());
-        return false;
-    }
-}
-
-// Manter esta para compatibilidade (busca simples)
+// Buscar conteúdo por ID
 function getConteudoPorID($id) {
     try {
         $db = estabelecerConexao();
@@ -231,16 +164,18 @@ function getConteudoPorID($id) {
     }
 }
 
-// Inscrever utilizador
+// Inscrever utilizador num conteúdo
 function inscreverUtilizador($idUser, $idConteudo) {
     try {
         $db = estabelecerConexao();
+        // Verifica se já está inscrito
         $stmt = $db->prepare("SELECT * FROM Inscricoes WHERE IDuser = ? AND IDconteudo = ?");
         $stmt->execute([$idUser, $idConteudo]);
         if ($stmt->fetch()) {
-            return false; 
+            return false; // Já inscrito
         }
         
+        // Inscreve
         $stmt = $db->prepare("INSERT INTO Inscricoes (IDuser, IDconteudo, Progresso) VALUES (?, ?, 0)");
         return $stmt->execute([$idUser, $idConteudo]);
     } catch(PDOException $e) {
