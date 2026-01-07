@@ -2,7 +2,7 @@
 session_start();
 include 'model.php';
 
-// Ativar exibição de erros para diagnóstico se a página ficar branca
+// Ativar exibição de erros para diagnóstico
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -17,7 +17,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $dados = getDadosUtilizador($_SESSION['user_id']);
 
-// Se não encontrar o utilizador, força logout para evitar erros
 if (!$dados) {
     session_destroy();
     header("Location: login.php");
@@ -35,11 +34,14 @@ if (!empty($dados['Idade'])) {
 }
 
 /* ================= CONTEÚDO DO UTILIZADOR ================= */
-// Importante: As strings devem bater exatamente com a coluna 'Tipo' na base de dados
-$cursos_inscritos     = getConteudoUtilizador($id_logado, 'Curso');
+// ATENÇÃO: Estes nomes têm de bater certo com a coluna 'Tipo' na base de dados
+// Ajustei 'Explicação' para 'Explicacoes' conforme o teu print.
+// Se os cursos não aparecerem, verifica se na BD tens 'Curso' ou 'Cursos' e altera aqui se necessário.
+
+$cursos_inscritos     = getConteudoUtilizador($id_logado, 'Curso'); 
 $palestras_favoritas  = getConteudoUtilizador($id_logado, 'Palestra');
 $ebooks               = getConteudoUtilizador($id_logado, 'Ebook');
-$explicacoes          = getConteudoUtilizador($id_logado, 'Explicação');
+$explicacoes          = getConteudoUtilizador($id_logado, 'Explicacoes'); // <--- CORRIGIDO AQUI
 
 /* ================= HEADER ================= */
 $page_title = "StudyHub - Perfil";
