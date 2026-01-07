@@ -97,12 +97,52 @@ function getConteudoUtilizador($idUser, $tipo) {
 }
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Função para listar explicações na página de agendamento
+/* ================= FUNÇÕES PARA LISTAR CONTEÚDOS ================= */
+
+// Buscar todos os cursos
+function getTodosCursos() {
+    try {
+        $db = estabelecerConexao();
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Curso' ORDER BY IDconteudo DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em getTodosCursos: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Buscar todas as palestras
+function getTodasPalestras() {
+    try {
+        $db = estabelecerConexao();
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Palestra' ORDER BY IDconteudo DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em getTodasPalestras: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Buscar todos os ebooks
+function getTodosEbooks() {
+    try {
+        $db = estabelecerConexao();
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Ebook' ORDER BY IDconteudo DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em getTodosEbooks: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Buscar todas as explicações
 function getTodasExplicacoes() {
     try {
         $db = estabelecerConexao();
-        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação'");
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -111,14 +151,35 @@ function getTodasExplicacoes() {
     }
 }
 
-function getExplicacaoPorID($id) {
+// Buscar conteúdo por ID
+function getConteudoPorID($id) {
     try {
         $db = estabelecerConexao();
         $stmt = $db->prepare("SELECT * FROM Conteudo WHERE IDconteudo = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
-        error_log("Erro em getExplicacaoPorID: " . $e->getMessage());
+        error_log("Erro em getConteudoPorID: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Inscrever utilizador num conteúdo
+function inscreverUtilizador($idUser, $idConteudo) {
+    try {
+        $db = estabelecerConexao();
+        // Verifica se já está inscrito
+        $stmt = $db->prepare("SELECT * FROM Inscricoes WHERE IDuser = ? AND IDconteudo = ?");
+        $stmt->execute([$idUser, $idConteudo]);
+        if ($stmt->fetch()) {
+            return false; // Já inscrito
+        }
+        
+        // Inscreve
+        $stmt = $db->prepare("INSERT INTO Inscricoes (IDuser, IDconteudo, Progresso) VALUES (?, ?, 0)");
+        return $stmt->execute([$idUser, $idConteudo]);
+    } catch(PDOException $e) {
+        error_log("Erro em inscreverUtilizador: " . $e->getMessage());
         return false;
     }
 }

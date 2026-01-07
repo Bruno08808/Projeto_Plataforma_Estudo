@@ -4,6 +4,17 @@ $page_title = "StudyHub - Página Inicial";
 // define o CSS específico desta página
 $page_css = "homePage.css";
 
+// inclui o model para buscar dados
+include 'model.php';
+
+// Buscar conteúdos para mostrar na home
+$cursosPopulares = getTodosCursos();
+$palestrasPopulares = getTodasPalestras();
+
+// Limita a 3 itens para a home
+$cursosPopulares = array_slice($cursosPopulares, 0, 3);
+$palestrasPopulares = array_slice($palestrasPopulares, 0, 3);
+
 // inclui o header (navbar)
 include 'header.php';
 ?>
@@ -23,48 +34,31 @@ include 'header.php';
 <section class="cursos-populares">
     <div class="container">
         <h2>Cursos Mais Populares</h2>
-        <div class="cards-grid">
-            <!-- card 1 - isto aqui seria dinamico depois com a BD -->
-            <div class="course-card">
-                <div class="card-header laranja">
-                    <h3>Matemática Avançada</h3>
-                </div>
-                <div class="card-body">
-                    <p>Domina cálculo, álgebra e geometria com exercícios práticos</p>
-                    <div class="card-stats">
-                        <span>⭐ 4.8</span>
-                        <span>👥 2.5k alunos</span>
+        
+        <?php if (empty($cursosPopulares)): ?>
+            <p style="text-align: center; color: #666;">Em breve teremos cursos disponíveis!</p>
+        <?php else: ?>
+            <div class="cards-grid">
+                <?php foreach ($cursosPopulares as $curso): ?>
+                    <!-- card dinâmico da BD -->
+                    <div class="course-card">
+                        <div class="card-header laranja">
+                            <h3><?php echo htmlspecialchars($curso['Titulo']); ?></h3>
+                        </div>
+                        <div class="card-body">
+                            <p><?php echo htmlspecialchars($curso['Info_Extra'] ?? 'Curso completo e prático'); ?></p>
+                            <div class="card-stats">
+                                <span>⭐ 4.8</span>
+                                <span>👥 2.5k alunos</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- card 2 -->
-            <div class="course-card">
-                <div class="card-header laranja">
-                    <h3>Programação Web</h3>
-                </div>
-                <div class="card-body">
-                    <p>HTML, CSS, JavaScript e PHP do zero ao avançado</p>
-                    <div class="card-stats">
-                        <span>⭐ 4.9</span>
-                        <span>👥 3.2k alunos</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card 3 -->
-            <div class="course-card">
-                <div class="card-header laranja">
-                    <h3>Inglês Fluente</h3>
-                </div>
-                <div class="card-body">
-                    <p>Aprende inglês com nativos e consegue fluência</p>
-                    <div class="card-stats">
-                        <span>⭐ 4.7</span>
-                        <span>👥 1.8k alunos</span>
-                    </div>
-                </div>
-            </div>
+        <?php endif; ?>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="cursos.php" style="display: inline-block; padding: 12px 30px; background: #E89A3C; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Ver Todos os Cursos</a>
         </div>
     </div>
 </section>
@@ -73,48 +67,31 @@ include 'header.php';
 <section class="palestras-vistas">
     <div class="container">
         <h2>Palestras Mais Vistas</h2>
-        <div class="cards-grid">
-            <!-- palestra 1 -->
-            <div class="palestra-card">
-                <div class="card-header vermelho">
-                    <h3>Inteligência Artificial</h3>
-                </div>
-                <div class="card-body">
-                    <p>O futuro da IA e como vai mudar o mundo</p>
-                    <div class="card-stats">
-                        <span>👁️ 15k visualizações</span>
-                        <span>⏱️ 45min</span>
+        
+        <?php if (empty($palestrasPopulares)): ?>
+            <p style="text-align: center; color: #666;">Em breve teremos palestras disponíveis!</p>
+        <?php else: ?>
+            <div class="cards-grid">
+                <?php foreach ($palestrasPopulares as $palestra): ?>
+                    <!-- palestra dinâmica da BD -->
+                    <div class="palestra-card">
+                        <div class="card-header vermelho">
+                            <h3><?php echo htmlspecialchars($palestra['Titulo']); ?></h3>
+                        </div>
+                        <div class="card-body">
+                            <p><?php echo htmlspecialchars($palestra['Info_Extra'] ?? 'Uma palestra inspiradora'); ?></p>
+                            <div class="card-stats">
+                                <span>👁️ 15k visualizações</span>
+                                <span>⏱️ 45min</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- palestra 2 -->
-            <div class="palestra-card">
-                <div class="card-header vermelho">
-                    <h3>Gestão de Tempo</h3>
-                </div>
-                <div class="card-body">
-                    <p>Técnicas comprovadas para ser mais produtivo</p>
-                    <div class="card-stats">
-                        <span>👁️ 12k visualizações</span>
-                        <span>⏱️ 30min</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- palestra 3 -->
-            <div class="palestra-card">
-                <div class="card-header vermelho">
-                    <h3>Empreendedorismo</h3>
-                </div>
-                <div class="card-body">
-                    <p>Como começar o teu próprio negócio do zero</p>
-                    <div class="card-stats">
-                        <span>👁️ 10k visualizações</span>
-                        <span>⏱️ 50min</span>
-                    </div>
-                </div>
-            </div>
+        <?php endif; ?>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="palestras.php" style="display: inline-block; padding: 12px 30px; background: #D96459; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Ver Todas as Palestras</a>
         </div>
     </div>
 </section>
