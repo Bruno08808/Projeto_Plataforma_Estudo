@@ -1,0 +1,105 @@
+/* Hero Header */
+.content-hero {
+    padding: 80px 0;
+    color: white;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 40px;
+}
+
+.badge-tipo {
+    background: #3498db;
+    padding: 5px 15px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.content-hero h1 {
+    font-size: 2.5rem;
+    margin: 15px 0;
+}
+
+.hero-meta {
+    font-size: 1.2rem;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.price-tag {
+    background: #2ecc71;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Layout */
+.content-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Esquerda larga, Direita estreita */
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Detalhes */
+.specific-details {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 30px;
+    border-left: 5px solid #3498db;
+}
+
+.detail-list {
+    list-style: none;
+    padding: 0;
+}
+
+.detail-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Sidebar Card */
+.action-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 20px; /* Faz o cartão seguir o scroll */
+    text-align: center;
+}
+
+.btn-cta {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-cta:hover {
+    background: #2980b9;
+}
+
+.btn-cta.download { background: #e67e22; }
+.btn-cta.login { background: #7f8c8d; }
+
+.small-note { font-size: 0.8rem; margin-top: 10px; }
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .content-layout {
+        grid-template-columns: 1fr; /* Coluna única em mobile */
+    }
+}
