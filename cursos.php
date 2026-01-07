@@ -65,25 +65,36 @@ $cursos = getTodosCursos();
                     <!-- Curso dinâmico da BD -->
                     <div class="curso-card">
                         <div class="curso-thumbnail">
-                            <img src="https://via.placeholder.com/400x250" alt="<?php echo htmlspecialchars($curso['Titulo']); ?>">
-                            <span class="badge-novo">Novo</span>
-                            <span class="badge-nivel">Iniciante</span>
+                            <?php 
+                            // Usa a imagem da BD se existir, senão placeholder
+                            $imagemSrc = !empty($curso['Imagem']) ? htmlspecialchars($curso['Imagem']) : 'https://via.placeholder.com/400x250';
+                            ?>
+                            <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($curso['Titulo']); ?>">
+                            
+                            <?php if ($curso['Disponibilidade'] == 1): ?>
+                                <span class="badge-novo">Disponível</span>
+                            <?php endif; ?>
                         </div>
                         <div class="curso-content">
                             <div class="curso-categoria">Curso</div>
                             <h3><?php echo htmlspecialchars($curso['Titulo']); ?></h3>
-                            <p><?php echo htmlspecialchars($curso['Info_Extra'] ?? 'Curso completo e prático'); ?></p>
-                            <div class="curso-stats">
-                                <span>⭐ 4.8</span>
-                                <span>👥 2.5k alunos</span>
-                                <span>⏱️ 30h</span>
-                            </div>
-                            <div class="curso-footer">
-                                <div class="instrutor">
-                                    <img src="https://via.placeholder.com/40" alt="Instrutor">
-                                    <span>Professor Especialista</span>
+                            
+                            <?php if (!empty($curso['Info_Extra'])): ?>
+                                <p><?php echo htmlspecialchars($curso['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($curso['Avaliacao'])): ?>
+                                <div class="curso-stats">
+                                    <span>⭐ <?php echo htmlspecialchars($curso['Avaliacao']); ?></span>
                                 </div>
-                                <div class="preco">€89</div>
+                            <?php endif; ?>
+                            
+                            <div class="curso-footer">
+                                <?php if (!empty($curso['Preco']) && $curso['Preco'] > 0): ?>
+                                    <div class="preco">€<?php echo number_format($curso['Preco'], 2, ',', '.'); ?></div>
+                                <?php else: ?>
+                                    <div class="preco" style="color: #5FA777; font-weight: bold;">Gratuito</div>
+                                <?php endif; ?>
                             </div>
                             
                             <?php if (isset($_SESSION['user_id'])): ?>

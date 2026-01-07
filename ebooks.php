@@ -52,7 +52,10 @@ $ebooks = getTodosEbooks();
                     <!-- Ebook dinâmico da BD -->
                     <div class="ebook-card">
                         <div class="ebook-cover">
-                            <img src="https://via.placeholder.com/300x400" alt="<?php echo htmlspecialchars($ebook['Titulo']); ?>">
+                            <?php 
+                            $imagemSrc = !empty($ebook['Imagem']) ? htmlspecialchars($ebook['Imagem']) : 'https://via.placeholder.com/300x400';
+                            ?>
+                            <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($ebook['Titulo']); ?>">
                             <div class="ebook-overlay">
                                 <?php if (isset($_SESSION['user_id'])): ?>
                                     <form method="POST" action="inscrever.php">
@@ -62,19 +65,31 @@ $ebooks = getTodosEbooks();
                                 <?php else: ?>
                                     <a href="login.php" class="btn-download">🔒 Login para Download</a>
                                 <?php endif; ?>
-                                <button class="btn-preview">👁️ Pré-visualizar</button>
                             </div>
                         </div>
                         <div class="ebook-info">
                             <span class="ebook-badge">Ebook</span>
                             <h3><?php echo htmlspecialchars($ebook['Titulo']); ?></h3>
-                            <p class="autor">Por Autor Especialista</p>
-                            <div class="ebook-stats">
-                                <span>⭐ 4.8</span>
-                                <span>📖 250 páginas</span>
-                                <span>⬇️ 2.1k downloads</span>
-                            </div>
-                            <p class="descricao"><?php echo htmlspecialchars($ebook['Info_Extra'] ?? 'Um guia completo sobre este tema fascinante.'); ?></p>
+                            
+                            <?php if (!empty($ebook['Info_Extra'])): ?>
+                                <p class="descricao"><?php echo htmlspecialchars($ebook['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($ebook['Avaliacao'])): ?>
+                                <div class="ebook-stats">
+                                    <span>⭐ <?php echo htmlspecialchars($ebook['Avaliacao']); ?></span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($ebook['Preco']) && $ebook['Preco'] > 0): ?>
+                                <p class="preco-ebook" style="font-size: 1.2em; color: #E89A3C; font-weight: bold; margin-top: 10px;">
+                                    €<?php echo number_format($ebook['Preco'], 2, ',', '.'); ?>
+                                </p>
+                            <?php else: ?>
+                                <p class="preco-ebook" style="font-size: 1.2em; color: #5FA777; font-weight: bold; margin-top: 10px;">
+                                    Gratuito
+                                </p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

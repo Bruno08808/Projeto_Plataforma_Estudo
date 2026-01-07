@@ -46,13 +46,16 @@ $palestras = getTodasPalestras();
             <div class="featured-info">
                 <span class="categoria-badge">Palestra</span>
                 <h3><?php echo htmlspecialchars($palestraDestaque['Titulo']); ?></h3>
-                <p class="palestrante">👤 Especialista Convidado</p>
-                <p class="descricao"><?php echo htmlspecialchars($palestraDestaque['Info_Extra'] ?? 'Uma palestra inspiradora sobre este tema importante.'); ?></p>
-                <div class="stats-row">
-                    <span>👁️ 25k visualizações</span>
-                    <span>⭐ 4.9 (342 avaliações)</span>
-                    <span>📅 Há 2 dias</span>
-                </div>
+                
+                <?php if (!empty($palestraDestaque['Info_Extra'])): ?>
+                    <p class="descricao"><?php echo htmlspecialchars($palestraDestaque['Info_Extra']); ?></p>
+                <?php endif; ?>
+                
+                <?php if (!empty($palestraDestaque['Avaliacao'])): ?>
+                    <div class="stats-row">
+                        <span>⭐ <?php echo htmlspecialchars($palestraDestaque['Avaliacao']); ?></span>
+                    </div>
+                <?php endif; ?>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <form method="POST" action="inscrever.php" style="margin: 0;">
                         <input type="hidden" name="idConteudo" value="<?php echo $palestraDestaque['IDconteudo']; ?>">
@@ -82,18 +85,25 @@ $palestras = getTodasPalestras();
                     <!-- Palestra dinâmica da BD -->
                     <div class="palestra-card" data-categoria="todas">
                         <div class="palestra-thumb">
-                            <img src="https://via.placeholder.com/400x225" alt="<?php echo htmlspecialchars($palestra['Titulo']); ?>">
+                            <?php 
+                            $imagemSrc = !empty($palestra['Imagem']) ? htmlspecialchars($palestra['Imagem']) : 'https://via.placeholder.com/400x225';
+                            ?>
+                            <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($palestra['Titulo']); ?>">
                             <div class="play-overlay">▶</div>
-                            <span class="duracao">45min</span>
                         </div>
                         <div class="palestra-content">
                             <span class="cat-badge negocios">Palestra</span>
                             <h3><?php echo htmlspecialchars($palestra['Titulo']); ?></h3>
-                            <p class="speaker"><?php echo htmlspecialchars($palestra['Info_Extra'] ?? 'Palestrante Especialista'); ?></p>
-                            <div class="palestra-stats">
-                                <span>👁️ 12k</span>
-                                <span>⭐ 4.8</span>
-                            </div>
+                            
+                            <?php if (!empty($palestra['Info_Extra'])): ?>
+                                <p class="speaker"><?php echo htmlspecialchars($palestra['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($palestra['Avaliacao'])): ?>
+                                <div class="palestra-stats">
+                                    <span>⭐ <?php echo htmlspecialchars($palestra['Avaliacao']); ?></span>
+                                </div>
+                            <?php endif; ?>
                             
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <form method="POST" action="inscrever.php" style="margin-top: 10px;">
@@ -110,7 +120,6 @@ $palestras = getTodasPalestras();
         <?php endif; ?>
     </div>
 </section>
-
 
 <script>
 // sistema de tabs

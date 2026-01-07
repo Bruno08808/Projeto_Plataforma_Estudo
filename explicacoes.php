@@ -46,26 +46,47 @@ $explicacoes = getTodasExplicacoes();
                     <!-- Explicação dinâmica da BD -->
                     <div class="explicador-card" data-categoria="todas">
                         <div class="explicador-photo">
-                            <img src="https://via.placeholder.com/150" alt="Professor">
-                            <span class="badge-disponivel">Disponível</span>
+                            <?php 
+                            $imagemSrc = !empty($explicacao['Imagem']) ? htmlspecialchars($explicacao['Imagem']) : 'https://via.placeholder.com/150';
+                            ?>
+                            <img src="<?php echo $imagemSrc; ?>" alt="Professor">
+                            <?php if ($explicacao['Disponibilidade'] == 1): ?>
+                                <span class="badge-disponivel">Disponível</span>
+                            <?php else: ?>
+                                <span class="badge-ocupado">Ocupado</span>
+                            <?php endif; ?>
                         </div>
                         <div class="explicador-info">
                             <h3><?php echo htmlspecialchars($explicacao['Titulo']); ?></h3>
-                            <p class="especialidade"><?php echo htmlspecialchars($explicacao['Info_Extra'] ?? 'Explicação Especializada'); ?></p>
-                            <div class="rating">
-                                <span>⭐⭐⭐⭐⭐</span>
-                                <span class="reviews">(48 avaliações)</span>
-                            </div>
-                            <p class="descricao">Professor certificado com experiência comprovada</p>
+                            
+                            <?php if (!empty($explicacao['Info_Extra'])): ?>
+                                <p class="especialidade"><?php echo htmlspecialchars($explicacao['Info_Extra']); ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($explicacao['Avaliacao'])): ?>
+                                <div class="rating">
+                                    <span>⭐ <?php echo htmlspecialchars($explicacao['Avaliacao']); ?>/5</span>
+                                </div>
+                            <?php endif; ?>
+                            
                             <div class="preco-horario">
-                                <span class="preco">€25/hora</span>
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <form method="POST" action="inscrever.php" style="margin: 0;">
-                                        <input type="hidden" name="idConteudo" value="<?php echo $explicacao['IDconteudo']; ?>">
-                                        <button type="submit" class="btn-agendar">Agendar</button>
-                                    </form>
+                                <?php if (!empty($explicacao['Preco']) && $explicacao['Preco'] > 0): ?>
+                                    <span class="preco">€<?php echo number_format($explicacao['Preco'], 2, ',', '.'); ?>/hora</span>
                                 <?php else: ?>
-                                    <a href="login.php" class="btn-agendar" style="display: inline-block; text-decoration: none; padding: 8px 16px;">Login</a>
+                                    <span class="preco" style="color: #5FA777;">Gratuito</span>
+                                <?php endif; ?>
+                                
+                                <?php if ($explicacao['Disponibilidade'] == 1): ?>
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <form method="POST" action="inscrever.php" style="margin: 0;">
+                                            <input type="hidden" name="idConteudo" value="<?php echo $explicacao['IDconteudo']; ?>">
+                                            <button type="submit" class="btn-agendar">Agendar</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <a href="login.php" class="btn-agendar" style="display: inline-block; text-decoration: none; padding: 8px 16px;">Login</a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <button class="btn-agendar" disabled>Indisponível</button>
                                 <?php endif; ?>
                             </div>
                         </div>
