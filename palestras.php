@@ -2,7 +2,11 @@
 $page_title = "StudyHub - Palestras";
 $page_css = "palestras.css";
 session_start();
+include 'model.php';
 include 'header.php';
+
+// Buscar todas as palestras da BD
+$palestras = getTodasPalestras();
 ?>
 
 <!-- HERO PALESTRAS -->
@@ -27,6 +31,9 @@ include 'header.php';
 </section>
 
 <!-- PALESTRAS EM DESTAQUE -->
+<?php if (!empty($palestras)): 
+    $palestraDestaque = $palestras[0]; // Primeira palestra em destaque
+?>
 <section class="palestras-destaque">
     <div class="container">
         <h2>🔥 Em Destaque</h2>
@@ -37,136 +44,70 @@ include 'header.php';
                 <span class="duracao-badge">1h 15min</span>
             </div>
             <div class="featured-info">
-                <span class="categoria-badge">Tecnologia</span>
-                <h3>O Futuro da Inteligência Artificial</h3>
-                <p class="palestrante">👤 Dr. Miguel Santos • Google AI</p>
-                <p class="descricao">Uma visão profunda sobre como a IA vai transformar todas as indústrias nos próximos 10 anos. Descobre as tendências, desafios e oportunidades que nos esperam.</p>
+                <span class="categoria-badge">Palestra</span>
+                <h3><?php echo htmlspecialchars($palestraDestaque['Titulo']); ?></h3>
+                <p class="palestrante">👤 Especialista Convidado</p>
+                <p class="descricao"><?php echo htmlspecialchars($palestraDestaque['Info_Extra'] ?? 'Uma palestra inspiradora sobre este tema importante.'); ?></p>
                 <div class="stats-row">
                     <span>👁️ 25k visualizações</span>
                     <span>⭐ 4.9 (342 avaliações)</span>
                     <span>📅 Há 2 dias</span>
                 </div>
-                <button class="btn-assistir">▶ Assistir Agora</button>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <form method="POST" action="inscrever.php" style="margin: 0;">
+                        <input type="hidden" name="idConteudo" value="<?php echo $palestraDestaque['IDconteudo']; ?>">
+                        <button type="submit" class="btn-assistir">▶ Assistir Agora</button>
+                    </form>
+                <?php else: ?>
+                    <a href="login.php" class="btn-assistir" style="text-decoration: none;">▶ Fazer Login para Assistir</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- GRID DE PALESTRAS -->
 <section class="palestras-grid-section">
     <div class="container">
         <h2>Todas as Palestras</h2>
-        <div class="palestras-grid">
-            
-            <!-- Palestra 1 -->
-            <div class="palestra-card" data-categoria="negocios">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">45min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge negocios">Negócios</span>
-                    <h3>Como Escalar uma Startup</h3>
-                    <p class="speaker">Ana Costa • CEO Startup Inc</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 12k</span>
-                        <span>⭐ 4.8</span>
-                    </div>
-                </div>
+        
+        <?php if (empty($palestras)): ?>
+            <div class="empty-state">
+                <p>Ainda não há palestras disponíveis no momento.</p>
             </div>
-
-            <!-- Palestra 2 -->
-            <div class="palestra-card" data-categoria="motivacao">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">32min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge motivacao">Motivação</span>
-                    <h3>Supera os Teus Limites</h3>
-                    <p class="speaker">João Silva • Coach Motivacional</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 18k</span>
-                        <span>⭐ 5.0</span>
+        <?php else: ?>
+            <div class="palestras-grid">
+                <?php foreach ($palestras as $palestra): ?>
+                    <!-- Palestra dinâmica da BD -->
+                    <div class="palestra-card" data-categoria="todas">
+                        <div class="palestra-thumb">
+                            <img src="https://via.placeholder.com/400x225" alt="<?php echo htmlspecialchars($palestra['Titulo']); ?>">
+                            <div class="play-overlay">▶</div>
+                            <span class="duracao">45min</span>
+                        </div>
+                        <div class="palestra-content">
+                            <span class="cat-badge negocios">Palestra</span>
+                            <h3><?php echo htmlspecialchars($palestra['Titulo']); ?></h3>
+                            <p class="speaker"><?php echo htmlspecialchars($palestra['Info_Extra'] ?? 'Palestrante Especialista'); ?></p>
+                            <div class="palestra-stats">
+                                <span>👁️ 12k</span>
+                                <span>⭐ 4.8</span>
+                            </div>
+                            
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <form method="POST" action="inscrever.php" style="margin-top: 10px;">
+                                    <input type="hidden" name="idConteudo" value="<?php echo $palestra['IDconteudo']; ?>">
+                                    <button type="submit" class="btn-assistir" style="width: 100%; padding: 8px;">Assistir</button>
+                                </form>
+                            <?php else: ?>
+                                <a href="login.php" style="display: block; margin-top: 10px; text-align: center; padding: 8px; background: #4A90E2; color: white; text-decoration: none; border-radius: 5px;">Login</a>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- Palestra 3 -->
-            <div class="palestra-card" data-categoria="tecnologia">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">50min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge tecnologia">Tecnologia</span>
-                    <h3>Blockchain Explicado</h3>
-                    <p class="speaker">Pedro Alves • Engenheiro Blockchain</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 9k</span>
-                        <span>⭐ 4.7</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Palestra 4 -->
-            <div class="palestra-card" data-categoria="saude">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">38min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge saude">Saúde</span>
-                    <h3>Mindfulness no Dia a Dia</h3>
-                    <p class="speaker">Rita Santos • Psicóloga Clínica</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 15k</span>
-                        <span>⭐ 4.9</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Palestra 5 -->
-            <div class="palestra-card" data-categoria="tecnologia">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">55min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge tecnologia">Tecnologia</span>
-                    <h3>Cibersegurança em 2024</h3>
-                    <p class="speaker">Carlos Mendes • Especialista Segurança</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 11k</span>
-                        <span>⭐ 4.8</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Palestra 6 -->
-            <div class="palestra-card" data-categoria="negocios">
-                <div class="palestra-thumb">
-                    <img src="https://via.placeholder.com/400x225" alt="Palestra">
-                    <div class="play-overlay">▶</div>
-                    <span class="duracao">42min</span>
-                </div>
-                <div class="palestra-content">
-                    <span class="cat-badge negocios">Negócios</span>
-                    <h3>Liderança 4.0</h3>
-                    <p class="speaker">Maria Oliveira • Consultora Empresarial</p>
-                    <div class="palestra-stats">
-                        <span>👁️ 13k</span>
-                        <span>⭐ 4.9</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <?php endif; ?>
     </div>
 </section>
 

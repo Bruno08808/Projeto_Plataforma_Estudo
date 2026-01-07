@@ -2,7 +2,11 @@
 $page_title = "StudyHub - Ebooks";
 $page_css = "ebooks.css";
 session_start();
+include 'model.php';
 include 'header.php';
+
+// Buscar todos os ebooks da BD
+$ebooks = getTodosEbooks();
 ?>
 
 <!-- HERO EBOOKS -->
@@ -38,141 +42,44 @@ include 'header.php';
 <!-- GRID DE EBOOKS -->
 <section class="ebooks-section">
     <div class="container">
-        <div class="ebooks-grid">
-            
-            <!-- Ebook 1 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
-                    </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge">Tecnologia</span>
-                    <h3>Clean Code: Manual Prático</h3>
-                    <p class="autor">Por Robert C. Martin</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 4.9</span>
-                        <span>📖 420 páginas</span>
-                        <span>⬇️ 2.1k downloads</span>
-                    </div>
-                    <p class="descricao">Aprende as melhores práticas para escrever código limpo e maintível</p>
-                </div>
+        <?php if (empty($ebooks)): ?>
+            <div class="empty-state">
+                <p>Ainda não há ebooks disponíveis no momento.</p>
             </div>
-
-            <!-- Ebook 2 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
+        <?php else: ?>
+            <div class="ebooks-grid">
+                <?php foreach ($ebooks as $ebook): ?>
+                    <!-- Ebook dinâmico da BD -->
+                    <div class="ebook-card">
+                        <div class="ebook-cover">
+                            <img src="https://via.placeholder.com/300x400" alt="<?php echo htmlspecialchars($ebook['Titulo']); ?>">
+                            <div class="ebook-overlay">
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <form method="POST" action="inscrever.php">
+                                        <input type="hidden" name="idConteudo" value="<?php echo $ebook['IDconteudo']; ?>">
+                                        <button type="submit" class="btn-download">📥 Download</button>
+                                    </form>
+                                <?php else: ?>
+                                    <a href="login.php" class="btn-download">🔒 Login para Download</a>
+                                <?php endif; ?>
+                                <button class="btn-preview">👁️ Pré-visualizar</button>
+                            </div>
+                        </div>
+                        <div class="ebook-info">
+                            <span class="ebook-badge">Ebook</span>
+                            <h3><?php echo htmlspecialchars($ebook['Titulo']); ?></h3>
+                            <p class="autor">Por Autor Especialista</p>
+                            <div class="ebook-stats">
+                                <span>⭐ 4.8</span>
+                                <span>📖 250 páginas</span>
+                                <span>⬇️ 2.1k downloads</span>
+                            </div>
+                            <p class="descricao"><?php echo htmlspecialchars($ebook['Info_Extra'] ?? 'Um guia completo sobre este tema fascinante.'); ?></p>
+                        </div>
                     </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge negocio">Negócios</span>
-                    <h3>Lean Startup</h3>
-                    <p class="autor">Por Eric Ries</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 4.8</span>
-                        <span>📖 336 páginas</span>
-                        <span>⬇️ 3.5k downloads</span>
-                    </div>
-                    <p class="descricao">Como criar empresas inovadoras com menos recursos</p>
-                </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- Ebook 3 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
-                    </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge pessoal">Desenvolvimento Pessoal</span>
-                    <h3>Hábitos Atómicos</h3>
-                    <p class="autor">Por James Clear</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 5.0</span>
-                        <span>📖 288 páginas</span>
-                        <span>⬇️ 5.2k downloads</span>
-                    </div>
-                    <p class="descricao">Pequenas mudanças que transformam a tua vida</p>
-                </div>
-            </div>
-
-            <!-- Ebook 4 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
-                    </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge marketing">Marketing</span>
-                    <h3>Marketing 4.0</h3>
-                    <p class="autor">Por Philip Kotler</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 4.7</span>
-                        <span>📖 192 páginas</span>
-                        <span>⬇️ 1.8k downloads</span>
-                    </div>
-                    <p class="descricao">Estratégias de marketing na era digital</p>
-                </div>
-            </div>
-
-            <!-- Ebook 5 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
-                    </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge design">Design</span>
-                    <h3>Don't Make Me Think</h3>
-                    <p class="autor">Por Steve Krug</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 4.9</span>
-                        <span>📖 216 páginas</span>
-                        <span>⬇️ 2.7k downloads</span>
-                    </div>
-                    <p class="descricao">Princípios fundamentais de usabilidade web</p>
-                </div>
-            </div>
-
-            <!-- Ebook 6 -->
-            <div class="ebook-card">
-                <div class="ebook-cover">
-                    <img src="https://via.placeholder.com/300x400" alt="Ebook">
-                    <div class="ebook-overlay">
-                        <button class="btn-download">📥 Download</button>
-                        <button class="btn-preview">👁️ Pré-visualizar</button>
-                    </div>
-                </div>
-                <div class="ebook-info">
-                    <span class="ebook-badge">Tecnologia</span>
-                    <h3>The Pragmatic Programmer</h3>
-                    <p class="autor">Por David Thomas</p>
-                    <div class="ebook-stats">
-                        <span>⭐ 4.8</span>
-                        <span>📖 352 páginas</span>
-                        <span>⬇️ 3.1k downloads</span>
-                    </div>
-                    <p class="descricao">De aprendiz a mestre programador</p>
-                </div>
-            </div>
-
-        </div>
+        <?php endif; ?>
     </div>
 </section>
 

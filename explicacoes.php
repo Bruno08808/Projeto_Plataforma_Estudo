@@ -5,9 +5,11 @@ $page_css = "explicacoes.css";
 
 // verifica se tá logado (opcional, depende se queres que só users logados vejam)
 session_start();
-
-// inclui o header
+include 'model.php';
 include 'header.php';
+
+// Buscar todas as explicações da BD
+$explicacoes = getTodasExplicacoes();
 ?>
 
 <!-- HERO SECTION -->
@@ -34,135 +36,43 @@ include 'header.php';
 <!-- GRID DE EXPLICADORES -->
 <section class="explicadores-section">
     <div class="container">
-        <div class="explicadores-grid">
-            
-            <!-- Explicador 1 -->
-            <div class="explicador-card" data-categoria="matematica">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-disponivel">Disponível</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. Maria Santos</h3>
-                    <p class="especialidade">Matemática & Física</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(48 avaliações)</span>
-                    </div>
-                    <p class="descricao">Licenciada em Matemática com 10 anos de experiência em ensino</p>
-                    <div class="preco-horario">
-                        <span class="preco">€25/hora</span>
-                        <button class="btn-agendar">Agendar</button>
-                    </div>
-                </div>
+        <?php if (empty($explicacoes)): ?>
+            <div class="empty-state">
+                <p>Ainda não há explicações disponíveis no momento.</p>
             </div>
-
-            <!-- Explicador 2 -->
-            <div class="explicador-card" data-categoria="linguas">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-ocupado">Ocupado</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. João Costa</h3>
-                    <p class="especialidade">Inglês & Espanhol</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(92 avaliações)</span>
+        <?php else: ?>
+            <div class="explicadores-grid">
+                <?php foreach ($explicacoes as $explicacao): ?>
+                    <!-- Explicação dinâmica da BD -->
+                    <div class="explicador-card" data-categoria="todas">
+                        <div class="explicador-photo">
+                            <img src="https://via.placeholder.com/150" alt="Professor">
+                            <span class="badge-disponivel">Disponível</span>
+                        </div>
+                        <div class="explicador-info">
+                            <h3><?php echo htmlspecialchars($explicacao['Titulo']); ?></h3>
+                            <p class="especialidade"><?php echo htmlspecialchars($explicacao['Info_Extra'] ?? 'Explicação Especializada'); ?></p>
+                            <div class="rating">
+                                <span>⭐⭐⭐⭐⭐</span>
+                                <span class="reviews">(48 avaliações)</span>
+                            </div>
+                            <p class="descricao">Professor certificado com experiência comprovada</p>
+                            <div class="preco-horario">
+                                <span class="preco">€25/hora</span>
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <form method="POST" action="inscrever.php" style="margin: 0;">
+                                        <input type="hidden" name="idConteudo" value="<?php echo $explicacao['IDconteudo']; ?>">
+                                        <button type="submit" class="btn-agendar">Agendar</button>
+                                    </form>
+                                <?php else: ?>
+                                    <a href="login.php" class="btn-agendar" style="display: inline-block; text-decoration: none; padding: 8px 16px;">Login</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
-                    <p class="descricao">Nativo bilingue com certificação Cambridge</p>
-                    <div class="preco-horario">
-                        <span class="preco">€30/hora</span>
-                        <button class="btn-agendar" disabled>Indisponível</button>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- Explicador 3 -->
-            <div class="explicador-card" data-categoria="programacao">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-disponivel">Disponível</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. Ana Silva</h3>
-                    <p class="especialidade">Python & Web Development</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(67 avaliações)</span>
-                    </div>
-                    <p class="descricao">Engenheira de Software com paixão por ensinar</p>
-                    <div class="preco-horario">
-                        <span class="preco">€35/hora</span>
-                        <button class="btn-agendar">Agendar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Explicador 4 -->
-            <div class="explicador-card" data-categoria="ciencias">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-disponivel">Disponível</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. Pedro Oliveira</h3>
-                    <p class="especialidade">Química & Biologia</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(35 avaliações)</span>
-                    </div>
-                    <p class="descricao">Doutorado em Química Orgânica</p>
-                    <div class="preco-horario">
-                        <span class="preco">€28/hora</span>
-                        <button class="btn-agendar">Agendar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Explicador 5 -->
-            <div class="explicador-card" data-categoria="matematica">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-disponivel">Disponível</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. Rita Ferreira</h3>
-                    <p class="especialidade">Matemática Avançada</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(54 avaliações)</span>
-                    </div>
-                    <p class="descricao">Especialista em preparação para exames nacionais</p>
-                    <div class="preco-horario">
-                        <span class="preco">€27/hora</span>
-                        <button class="btn-agendar">Agendar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Explicador 6 -->
-            <div class="explicador-card" data-categoria="linguas">
-                <div class="explicador-photo">
-                    <img src="https://via.placeholder.com/150" alt="Professor">
-                    <span class="badge-disponivel">Disponível</span>
-                </div>
-                <div class="explicador-info">
-                    <h3>Prof. Carlos Mendes</h3>
-                    <p class="especialidade">Francês & Português</p>
-                    <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                        <span class="reviews">(41 avaliações)</span>
-                    </div>
-                    <p class="descricao">Professor certificado com experiência internacional</p>
-                    <div class="preco-horario">
-                        <span class="preco">€26/hora</span>
-                        <button class="btn-agendar">Agendar</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <?php endif; ?>
     </div>
 </section>
 
