@@ -111,35 +111,6 @@ $palestras = getTodasPalestras();
     </div>
 </section>
 
-<!-- PRÓXIMAS PALESTRAS LIVE -->
-<section class="proximas-lives">
-    <div class="container">
-        <h2>📅 Próximas Palestras ao Vivo</h2>
-        <div class="lives-grid">
-            <div class="live-card">
-                <div class="live-badge">🔴 LIVE</div>
-                <h3>Workshop de Python</h3>
-                <p class="live-speaker">Prof. João Costa</p>
-                <p class="live-data">📅 25 Dez • 15:00</p>
-                <button class="btn-participar">Participar</button>
-            </div>
-            <div class="live-card">
-                <div class="live-badge upcoming">📌 Em breve</div>
-                <h3>Marketing Digital 2024</h3>
-                <p class="live-speaker">Ana Silva</p>
-                <p class="live-data">📅 28 Dez • 18:30</p>
-                <button class="btn-participar">Registar</button>
-            </div>
-            <div class="live-card">
-                <div class="live-badge upcoming">📌 Em breve</div>
-                <h3>Produtividade Extrema</h3>
-                <p class="live-speaker">Pedro Santos</p>
-                <p class="live-data">📅 30 Dez • 14:00</p>
-                <button class="btn-participar">Registar</button>
-            </div>
-        </div>
-    </div>
-</section>
 
 <script>
 // sistema de tabs
