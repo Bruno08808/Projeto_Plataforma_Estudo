@@ -138,11 +138,12 @@ function getTodosEbooks() {
     }
 }
 
-// Buscar todas as explicações
+// Buscar todas as explicações - CORRIGIDO PARA 'Explicacoes'
 function getTodasExplicacoes() {
     try {
         $db = estabelecerConexao();
-        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação' ORDER BY IDconteudo DESC");
+        // Alterado de 'Explicação' para 'Explicacoes' para bater com a tua BD
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicacoes' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
