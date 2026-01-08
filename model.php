@@ -185,4 +185,41 @@ function inscreverUtilizador($idUser, $idConteudo) {
         return $stmt->execute([$idUser, $idConteudo]);
     } catch(PDOException $e) { return false; }
 }
+
+function getConteudoById($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM conteudo WHERE id_conteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+function getCursoDetalhes($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM curso WHERE id_conteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getExplicacaoDetalhes($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM explicacao WHERE id_conteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getEbookDetalhes($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM ebook WHERE id_conteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getPalestraDetalhes($id) {
+    $db = estabelecerConexao();
+    $stmt = $db->prepare("SELECT * FROM palestra WHERE id_conteudo = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
