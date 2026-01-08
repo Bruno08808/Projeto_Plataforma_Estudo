@@ -34,14 +34,24 @@ if (!empty($dados['Idade'])) {
 }
 
 /* ================= CONTEÚDO DO UTILIZADOR ================= */
-// ATENÇÃO: Estes nomes têm de bater certo com a coluna 'Tipo' na base de dados
-// Ajustei 'Explicação' para 'Explicacoes' conforme o teu print.
-// Se os cursos não aparecerem, verifica se na BD tens 'Curso' ou 'Cursos' e altera aqui se necessário.
+// IMPORTANTE: Tenta buscar com os dois nomes possíveis para explicações
 
 $cursos_inscritos     = getConteudoUtilizador($id_logado, 'Curso'); 
 $palestras_favoritas  = getConteudoUtilizador($id_logado, 'Palestra');
 $ebooks               = getConteudoUtilizador($id_logado, 'Ebook');
-$explicacoes          = getConteudoUtilizador($id_logado, 'Explicacoes'); // <--- CORRIGIDO AQUI
+
+// Tenta buscar explicações com cedilha primeiro
+$explicacoes = getConteudoUtilizador($id_logado, 'Explicação');
+
+// Se não encontrar, tenta sem cedilha
+if (empty($explicacoes)) {
+    $explicacoes = getConteudoUtilizador($id_logado, 'Explicacao');
+}
+
+// Se ainda não encontrar, tenta com "Explicacoes" (plural)
+if (empty($explicacoes)) {
+    $explicacoes = getConteudoUtilizador($id_logado, 'Explicacoes');
+}
 
 /* ================= HEADER ================= */
 $page_title = "StudyHub - Perfil";
@@ -142,6 +152,11 @@ include 'header.php';
                     <div class="explicacao-item">
                         <h3><?php echo htmlspecialchars($explicacao['nome']); ?></h3>
                         <span><?php echo htmlspecialchars($explicacao['info_extra'] ?? 'Agendado'); ?></span>
+                        <?php if ($explicacao['progresso'] !== null && $explicacao['progresso'] > 0): ?>
+                            <p style="color: #5FA777; margin-top: 5px;">✓ Sessão realizada</p>
+                        <?php else: ?>
+                            <p style="color: #E89A3C; margin-top: 5px;">⏱ Pendente</p>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
