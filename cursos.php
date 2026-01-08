@@ -103,7 +103,7 @@ if (!empty($pesquisa)) {
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <form method="POST" action="inscrever.php" style="margin: 0;">
                                     <input type="hidden" name="idConteudo" value="<?php echo $curso['IDconteudo']; ?>">
-                                    <button type="submit" class="btn-inscrever">Inscrever</button>
+                                    <a href="conteudo.php?tipo=curso&slug=<?= $curso['IDcurso'] ?>" class="btn-ver-mais"> Ver mais</a>
                                 </form>
                             <?php else: ?>
                                 <a href="login.php" class="btn-inscrever" style="display: block; text-align: center; text-decoration: none;">Fazer Login para Inscrever</a>
