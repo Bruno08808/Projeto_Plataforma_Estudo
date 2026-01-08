@@ -103,9 +103,7 @@ if (!empty($pesquisa)) {
                                     <?php if (isset($_SESSION['user_id'])): ?>
                                         <form method="POST" action="inscrever.php" style="margin: 0;">
                                             <input type="hidden" name="idConteudo" value="<?php echo $explicacao['IDconteudo']; ?>">
-                                            <a href="conteudo.php?tipo=explicacao&slug=<?= $explicacao['IDexplicacao'] ?>" class="btn-ver-mais">
-    Ver mais
-</a>
+                                            <a href="conteudo.php?slug=<?= $explicacao['Slug'] ?>" class="btn-ver-mais">Ver mais</a>
                                         </form>
                                     <?php else: ?>
                                         <a href="login.php" class="btn-agendar" style="display: inline-block; text-decoration: none; padding: 8px 16px;">Login</a>
