@@ -2,11 +2,18 @@
 $page_title = "StudyHub - Cursos";
 $page_css = "cursos.css";
 session_start();
-include 'model.php'; // IMPORTANTE: Inclui funções da BD
+include 'model.php';
 include 'header.php';
 
-// Buscar todos os cursos da BD
-$cursos = getTodosCursos();
+// Sistema de pesquisa
+$pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+
+// Buscar cursos (com ou sem filtro)
+if (!empty($pesquisa)) {
+    $cursos = pesquisarCursos($pesquisa);
+} else {
+    $cursos = getTodosCursos();
+}
 ?>
 
 <!-- HERO CURSOS -->
@@ -15,8 +22,23 @@ $cursos = getTodosCursos();
         <h1>Cursos Online</h1>
         <p>Aprende novas skills com cursos completos e certificados</p>
         <div class="search-bar">
-            <input type="text" placeholder="O que queres aprender hoje?">
-            <button>🔍 Procurar</button>
+            <form method="GET" action="cursos.php" style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto;">
+                <input 
+                    type="text" 
+                    name="pesquisa" 
+                    placeholder="Pesquisar cursos... (ex: Python, Web, Design)" 
+                    value="<?php echo htmlspecialchars($pesquisa); ?>"
+                    style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
+                >
+                <button type="submit" style="padding: 12px 30px; background: #E89A3C; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                    🔍 Procurar
+                </button>
+                <?php if (!empty($pesquisa)): ?>
+                    <a href="cursos.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
+                        ✕ Limpar
+                    </a>
+                <?php endif; ?>
+            </form>
         </div>
     </div>
 </section>
@@ -24,11 +46,23 @@ $cursos = getTodosCursos();
 <!-- CURSOS EM DESTAQUE -->
 <section class="cursos-destaque">
     <div class="container">
-        <h2>Cursos em Destaque</h2>
+        <?php if (!empty($pesquisa)): ?>
+            <h2>Resultados para "<?php echo htmlspecialchars($pesquisa); ?>" (<?php echo count($cursos); ?> encontrados)</h2>
+        <?php else: ?>
+            <h2>Cursos em Destaque</h2>
+        <?php endif; ?>
         
         <?php if (empty($cursos)): ?>
-            <div class="empty-state">
-                <p>Ainda não há cursos disponíveis no momento.</p>
+            <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                <p style="font-size: 18px; color: #666;">
+                    <?php if (!empty($pesquisa)): ?>
+                        Nenhum curso encontrado para "<?php echo htmlspecialchars($pesquisa); ?>". 
+                        <br><br>
+                        <a href="cursos.php" style="color: #E89A3C; text-decoration: underline;">Ver todos os cursos</a>
+                    <?php else: ?>
+                        Ainda não há cursos disponíveis no momento.
+                    <?php endif; ?>
+                </p>
             </div>
         <?php else: ?>
             <div class="cursos-grid">

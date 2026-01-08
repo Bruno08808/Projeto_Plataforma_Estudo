@@ -2,11 +2,18 @@
 $page_title = "StudyHub - Palestras";
 $page_css = "palestras.css";
 session_start();
-include 'model.php'; // IMPORTANTE: Inclui funções da BD
+include 'model.php';
 include 'header.php';
 
-// Buscar todas as palestras da BD
-$palestras = getTodasPalestras();
+// Sistema de pesquisa
+$pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+
+// Buscar palestras (com ou sem filtro)
+if (!empty($pesquisa)) {
+    $palestras = pesquisarPalestras($pesquisa);
+} else {
+    $palestras = getTodasPalestras();
+}
 ?>
 
 <!-- HERO PALESTRAS -->
@@ -14,60 +21,48 @@ $palestras = getTodasPalestras();
     <div class="hero-content">
         <h1>Palestras Inspiradoras</h1>
         <p>Aprende com especialistas de todo o mundo</p>
-    </div>
-</section>
-
-<!-- PALESTRAS EM DESTAQUE -->
-<?php if (!empty($palestras)): 
-    $palestraDestaque = $palestras[0]; // Primeira palestra em destaque
-?>
-<section class="palestras-destaque">
-    <div class="container">
-        <h2>Em Destaque</h2>
-        <div class="palestra-featured">
-            <div class="featured-video">
-                <?php 
-                $imagemSrc = !empty($palestraDestaque['Imagem']) ? htmlspecialchars($palestraDestaque['Imagem']) : 'https://via.placeholder.com/800x450';
-                ?>
-                <img src="<?php echo $imagemSrc; ?>" alt="Palestra">
-                <div class="play-button">▶</div>
-            </div>
-            <div class="featured-info">
-                <span class="categoria-badge">Palestra</span>
-                <h3><?php echo htmlspecialchars($palestraDestaque['Titulo']); ?></h3>
-                
-                <?php if (!empty($palestraDestaque['Info_Extra'])): ?>
-                    <p class="descricao"><?php echo htmlspecialchars($palestraDestaque['Info_Extra']); ?></p>
+        <div class="search-bar" style="margin-top: 20px;">
+            <form method="GET" action="palestras.php" style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto;">
+                <input 
+                    type="text" 
+                    name="pesquisa" 
+                    placeholder="Pesquisar palestras... (ex: IA, Marketing, Saúde)" 
+                    value="<?php echo htmlspecialchars($pesquisa); ?>"
+                    style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
+                >
+                <button type="submit" style="padding: 12px 30px; background: #D96459; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                    🔍 Procurar
+                </button>
+                <?php if (!empty($pesquisa)): ?>
+                    <a href="palestras.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
+                        ✕ Limpar
+                    </a>
                 <?php endif; ?>
-                
-                <?php if (!empty($palestraDestaque['Avaliacao'])): ?>
-                    <div class="stats-row">
-                        <span>⭐ <?php echo htmlspecialchars($palestraDestaque['Avaliacao']); ?>/5</span>
-                    </div>
-                <?php endif; ?>
-                
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <form method="POST" action="inscrever.php" style="margin: 0;">
-                        <input type="hidden" name="idConteudo" value="<?php echo $palestraDestaque['IDconteudo']; ?>">
-                        <button type="submit" class="btn-assistir">▶ Assistir Agora</button>
-                    </form>
-                <?php else: ?>
-                    <a href="login.php" class="btn-assistir" style="text-decoration: none;">▶ Fazer Login para Assistir</a>
-                <?php endif; ?>
-            </div>
+            </form>
         </div>
     </div>
 </section>
-<?php endif; ?>
 
 <!-- GRID DE PALESTRAS -->
 <section class="palestras-grid-section">
     <div class="container">
-        <h2>Todas as Palestras</h2>
+        <?php if (!empty($pesquisa)): ?>
+            <h2>Resultados para "<?php echo htmlspecialchars($pesquisa); ?>" (<?php echo count($palestras); ?> encontrados)</h2>
+        <?php else: ?>
+            <h2>Todas as Palestras</h2>
+        <?php endif; ?>
         
         <?php if (empty($palestras)): ?>
-            <div class="empty-state">
-                <p>Ainda não há palestras disponíveis no momento.</p>
+            <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                <p style="font-size: 18px; color: #666;">
+                    <?php if (!empty($pesquisa)): ?>
+                        Nenhuma palestra encontrada para "<?php echo htmlspecialchars($pesquisa); ?>". 
+                        <br><br>
+                        <a href="palestras.php" style="color: #D96459; text-decoration: underline;">Ver todas as palestras</a>
+                    <?php else: ?>
+                        Ainda não há palestras disponíveis no momento.
+                    <?php endif; ?>
+                </p>
             </div>
         <?php else: ?>
             <div class="palestras-grid">
