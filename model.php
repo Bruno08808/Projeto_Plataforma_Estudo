@@ -1,4 +1,8 @@
 <?php
+/**
+ * MODEL.PHP - VERSÃO FINAL COMPLETA
+ * Todas as funções necessárias para o StudyHub funcionar
+ */
 
 function estabelecerConexao() {
    $hostname = 'localhost';
@@ -96,10 +100,8 @@ function getConteudoUtilizador($idUser, $tipo) {
     }
 }
 
-
 /* ================= FUNÇÕES PARA LISTAR CONTEÚDOS ================= */
 
-// Buscar todos os cursos
 function getTodosCursos() {
     try {
         $db = estabelecerConexao();
@@ -112,7 +114,6 @@ function getTodosCursos() {
     }
 }
 
-// Buscar todas as palestras
 function getTodasPalestras() {
     try {
         $db = estabelecerConexao();
@@ -125,7 +126,6 @@ function getTodasPalestras() {
     }
 }
 
-// Buscar todos os ebooks
 function getTodosEbooks() {
     try {
         $db = estabelecerConexao();
@@ -138,10 +138,11 @@ function getTodosEbooks() {
     }
 }
 
-// Buscar todas as explicações
 function getTodasExplicacoes() {
     try {
         $db = estabelecerConexao();
+        // IMPORTANTE: Verifica se na tua BD é 'Explicação' ou 'Explicacoes'
+        // Ajusta conforme necessário
         $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação' ORDER BY IDconteudo DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -151,7 +152,6 @@ function getTodasExplicacoes() {
     }
 }
 
-// Buscar conteúdo por ID
 function getConteudoPorID($id) {
     try {
         $db = estabelecerConexao();
@@ -164,7 +164,18 @@ function getConteudoPorID($id) {
     }
 }
 
-// Inscrever utilizador num conteúdo
+function getConteudoPorSlug($slug) {
+    try {
+        $db = estabelecerConexao();
+        $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Slug = ?");
+        $stmt->execute([$slug]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em getConteudoPorSlug: " . $e->getMessage());
+        return false;
+    }
+}
+
 function inscreverUtilizador($idUser, $idConteudo) {
     try {
         $db = estabelecerConexao();
