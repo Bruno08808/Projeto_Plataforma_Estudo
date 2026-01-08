@@ -1,15 +1,19 @@
 <?php
-// define o título e CSS
 $page_title = "StudyHub - Explicações";
 $page_css = "explicacoes.css";
-
-// verifica se tá logado (opcional, depende se queres que só users logados vejam)
 session_start();
 include 'model.php';
 include 'header.php';
 
-// Buscar todas as explicações da BD
-$explicacoes = getTodasExplicacoes();
+// Sistema de pesquisa
+$pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+
+// Buscar explicações (com ou sem filtro)
+if (!empty($pesquisa)) {
+    $explicacoes = pesquisarExplicacoes($pesquisa);
+} else {
+    $explicacoes = getTodasExplicacoes();
+}
 ?>
 
 <!-- HERO SECTION -->
@@ -17,18 +21,24 @@ $explicacoes = getTodasExplicacoes();
     <div class="hero-content">
         <h1>Explicações Personalizadas</h1>
         <p>Aprende com os melhores professores em sessões one-on-one</p>
-    </div>
-</section>
-
-<!-- FILTROS -->
-<section class="filtros-section">
-    <div class="container">
-        <div class="filtros">
-            <button class="filtro-btn active" data-categoria="todas">Todas</button>
-            <button class="filtro-btn" data-categoria="matematica">Matemática</button>
-            <button class="filtro-btn" data-categoria="ciencias">Ciências</button>
-            <button class="filtro-btn" data-categoria="linguas">Línguas</button>
-            <button class="filtro-btn" data-categoria="programacao">Programação</button>
+        <div class="search-bar" style="margin-top: 20px;">
+            <form method="GET" action="explicacoes.php" style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto;">
+                <input 
+                    type="text" 
+                    name="pesquisa" 
+                    placeholder="Pesquisar explicações... (ex: Matemática, Física, Inglês)" 
+                    value="<?php echo htmlspecialchars($pesquisa); ?>"
+                    style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
+                >
+                <button type="submit" style="padding: 12px 30px; background: #4A90E2; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                    🔍 Procurar
+                </button>
+                <?php if (!empty($pesquisa)): ?>
+                    <a href="explicacoes.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
+                        ✕ Limpar
+                    </a>
+                <?php endif; ?>
+            </form>
         </div>
     </div>
 </section>
@@ -36,15 +46,28 @@ $explicacoes = getTodasExplicacoes();
 <!-- GRID DE EXPLICADORES -->
 <section class="explicadores-section">
     <div class="container">
+        <?php if (!empty($pesquisa)): ?>
+            <h2>Resultados para "<?php echo htmlspecialchars($pesquisa); ?>" (<?php echo count($explicacoes); ?> encontrados)</h2>
+        <?php else: ?>
+            <h2>Todas as Explicações</h2>
+        <?php endif; ?>
+        
         <?php if (empty($explicacoes)): ?>
-            <div class="empty-state">
-                <p>Ainda não há explicações disponíveis no momento.</p>
+            <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                <p style="font-size: 18px; color: #666;">
+                    <?php if (!empty($pesquisa)): ?>
+                        Nenhuma explicação encontrada para "<?php echo htmlspecialchars($pesquisa); ?>". 
+                        <br><br>
+                        <a href="explicacoes.php" style="color: #4A90E2; text-decoration: underline;">Ver todas as explicações</a>
+                    <?php else: ?>
+                        Ainda não há explicações disponíveis no momento.
+                    <?php endif; ?>
+                </p>
             </div>
         <?php else: ?>
             <div class="explicadores-grid">
                 <?php foreach ($explicacoes as $explicacao): ?>
-                    <!-- Explicação dinâmica da BD -->
-                    <div class="explicador-card" data-categoria="todas">
+                    <div class="explicador-card">
                         <div class="explicador-photo">
                             <?php 
                             $imagemSrc = !empty($explicacao['Imagem']) ? htmlspecialchars($explicacao['Imagem']) : 'https://via.placeholder.com/150';
@@ -120,29 +143,6 @@ $explicacoes = getTodasExplicacoes();
         </div>
     </div>
 </section>
-
-<script>
-// filtro de categorias
-document.querySelectorAll('.filtro-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        // remove active de todos
-        document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-        // adiciona active no clicado
-        this.classList.add('active');
-        
-        const categoria = this.dataset.categoria;
-        
-        // mostra/esconde cards
-        document.querySelectorAll('.explicador-card').forEach(card => {
-            if(categoria === 'todas' || card.dataset.categoria === categoria) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-});
-</script>
 
 <?php
 include 'footer.php';
