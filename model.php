@@ -1,7 +1,7 @@
 <?php
 /**
- * MODEL.PHP - VERSÃO FINAL COMPLETA
- * Todas as funções necessárias para o StudyHub funcionar
+ * MODEL.PHP - VERSÃO FINAL ATUALIZADA
+ * Inclui funções de pesquisa e correção para explicações
  */
 
 function estabelecerConexao() {
@@ -141,16 +141,116 @@ function getTodosEbooks() {
 function getTodasExplicacoes() {
     try {
         $db = estabelecerConexao();
-        // IMPORTANTE: Verifica se na tua BD é 'Explicação' ou 'Explicacoes'
-        // Ajusta conforme necessário
+        // Tenta primeiro com 'Explicação' (com cedilha)
         $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicação' ORDER BY IDconteudo DESC");
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Se não encontrar nada, tenta sem cedilha
+        if (empty($resultado)) {
+            $stmt = $db->prepare("SELECT * FROM Conteudo WHERE Tipo = 'Explicacao' ORDER BY IDconteudo DESC");
+            $stmt->execute();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+        return $resultado;
     } catch(PDOException $e) {
         error_log("Erro em getTodasExplicacoes: " . $e->getMessage());
         return [];
     }
 }
+
+/* ================= FUNÇÕES DE PESQUISA ================= */
+
+function pesquisarCursos($termo) {
+    try {
+        $db = estabelecerConexao();
+        $termo = "%$termo%";
+        $stmt = $db->prepare("
+            SELECT * FROM Conteudo 
+            WHERE Tipo = 'Curso' 
+            AND (Titulo LIKE ? OR Info_Extra LIKE ?)
+            ORDER BY IDconteudo DESC
+        ");
+        $stmt->execute([$termo, $termo]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em pesquisarCursos: " . $e->getMessage());
+        return [];
+    }
+}
+
+function pesquisarPalestras($termo) {
+    try {
+        $db = estabelecerConexao();
+        $termo = "%$termo%";
+        $stmt = $db->prepare("
+            SELECT * FROM Conteudo 
+            WHERE Tipo = 'Palestra' 
+            AND (Titulo LIKE ? OR Info_Extra LIKE ?)
+            ORDER BY IDconteudo DESC
+        ");
+        $stmt->execute([$termo, $termo]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em pesquisarPalestras: " . $e->getMessage());
+        return [];
+    }
+}
+
+function pesquisarEbooks($termo) {
+    try {
+        $db = estabelecerConexao();
+        $termo = "%$termo%";
+        $stmt = $db->prepare("
+            SELECT * FROM Conteudo 
+            WHERE Tipo = 'Ebook' 
+            AND (Titulo LIKE ? OR Info_Extra LIKE ?)
+            ORDER BY IDconteudo DESC
+        ");
+        $stmt->execute([$termo, $termo]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        error_log("Erro em pesquisarEbooks: " . $e->getMessage());
+        return [];
+    }
+}
+
+function pesquisarExplicacoes($termo) {
+    try {
+        $db = estabelecerConexao();
+        $termo = "%$termo%";
+        
+        // Tenta com cedilha primeiro
+        $stmt = $db->prepare("
+            SELECT * FROM Conteudo 
+            WHERE Tipo = 'Explicação' 
+            AND (Titulo LIKE ? OR Info_Extra LIKE ?)
+            ORDER BY IDconteudo DESC
+        ");
+        $stmt->execute([$termo, $termo]);
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Se não encontrar, tenta sem cedilha
+        if (empty($resultado)) {
+            $stmt = $db->prepare("
+                SELECT * FROM Conteudo 
+                WHERE Tipo = 'Explicacao' 
+                AND (Titulo LIKE ? OR Info_Extra LIKE ?)
+                ORDER BY IDconteudo DESC
+            ");
+            $stmt->execute([$termo, $termo]);
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+        return $resultado;
+    } catch(PDOException $e) {
+        error_log("Erro em pesquisarExplicacoes: " . $e->getMessage());
+        return [];
+    }
+}
+
+/* ================= OUTRAS FUNÇÕES ================= */
 
 function getConteudoPorID($id) {
     try {

@@ -23,7 +23,7 @@ $palestras = getTodasPalestras();
 ?>
 <section class="palestras-destaque">
     <div class="container">
-        <h2>🔥 Em Destaque</h2>
+        <h2>Em Destaque</h2>
         <div class="palestra-featured">
             <div class="featured-video">
                 <?php 

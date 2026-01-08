@@ -5,8 +5,15 @@ session_start();
 include 'model.php';
 include 'header.php';
 
-// Buscar todos os ebooks da BD
-$ebooks = getTodosEbooks();
+// Sistema de pesquisa
+$pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+
+// Buscar ebooks (com ou sem filtro)
+if (!empty($pesquisa)) {
+    $ebooks = pesquisarEbooks($pesquisa);
+} else {
+    $ebooks = getTodosEbooks();
+}
 ?>
 
 <!-- HERO EBOOKS -->
@@ -14,27 +21,24 @@ $ebooks = getTodosEbooks();
     <div class="hero-content">
         <h1>Biblioteca Digital</h1>
         <p>Milhares de ebooks para expandir o teu conhecimento</p>
-    </div>
-</section>
-
-<!-- FILTROS -->
-<section class="filtros-ebooks">
-    <div class="container">
-        <div class="filtros-wrapper">
-            <select class="filtro-select">
-                <option>Todas as Categorias</option>
-                <option>Tecnologia</option>
-                <option>Negócios</option>
-                <option>Desenvolvimento Pessoal</option>
-                <option>Marketing</option>
-                <option>Design</option>
-            </select>
-            <select class="filtro-select">
-                <option>Ordenar por</option>
-                <option>Mais Recentes</option>
-                <option>Mais Populares</option>
-                <option>Melhor Avaliados</option>
-            </select>
+        <div class="search-bar" style="margin-top: 20px;">
+            <form method="GET" action="ebooks.php" style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto;">
+                <input 
+                    type="text" 
+                    name="pesquisa" 
+                    placeholder="Pesquisar ebooks... (ex: PHP, JavaScript, Design)" 
+                    value="<?php echo htmlspecialchars($pesquisa); ?>"
+                    style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
+                >
+                <button type="submit" style="padding: 12px 30px; background: #5FA777; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                    🔍 Procurar
+                </button>
+                <?php if (!empty($pesquisa)): ?>
+                    <a href="ebooks.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
+                        ✕ Limpar
+                    </a>
+                <?php endif; ?>
+            </form>
         </div>
     </div>
 </section>
@@ -42,14 +46,27 @@ $ebooks = getTodosEbooks();
 <!-- GRID DE EBOOKS -->
 <section class="ebooks-section">
     <div class="container">
+        <?php if (!empty($pesquisa)): ?>
+            <h2>Resultados para "<?php echo htmlspecialchars($pesquisa); ?>" (<?php echo count($ebooks); ?> encontrados)</h2>
+        <?php else: ?>
+            <h2>Todos os Ebooks</h2>
+        <?php endif; ?>
+        
         <?php if (empty($ebooks)): ?>
-            <div class="empty-state">
-                <p>Ainda não há ebooks disponíveis no momento.</p>
+            <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                <p style="font-size: 18px; color: #666;">
+                    <?php if (!empty($pesquisa)): ?>
+                        Nenhum ebook encontrado para "<?php echo htmlspecialchars($pesquisa); ?>". 
+                        <br><br>
+                        <a href="ebooks.php" style="color: #5FA777; text-decoration: underline;">Ver todos os ebooks</a>
+                    <?php else: ?>
+                        Ainda não há ebooks disponíveis no momento.
+                    <?php endif; ?>
+                </p>
             </div>
         <?php else: ?>
             <div class="ebooks-grid">
                 <?php foreach ($ebooks as $ebook): ?>
-                    <!-- Ebook dinâmico da BD -->
                     <div class="ebook-card">
                         <div class="ebook-cover">
                             <?php 
@@ -72,12 +89,12 @@ $ebooks = getTodosEbooks();
                             <h3><?php echo htmlspecialchars($ebook['Titulo']); ?></h3>
                             
                             <?php if (!empty($ebook['Info_Extra'])): ?>
-                                <p class="descricao"><?php echo htmlspecialchars($ebook['Info_Extra']); ?></p>
+                                <p class="descricao"><?php echo htmlspecialchars(mb_substr($ebook['Info_Extra'], 0, 80)); ?>...</p>
                             <?php endif; ?>
                             
                             <?php if (!empty($ebook['Avaliacao'])): ?>
                                 <div class="ebook-stats">
-                                    <span>⭐ <?php echo htmlspecialchars($ebook['Avaliacao']); ?></span>
+                                    <span>⭐ <?php echo htmlspecialchars($ebook['Avaliacao']); ?>/5</span>
                                 </div>
                             <?php endif; ?>
                             
@@ -95,15 +112,6 @@ $ebooks = getTodosEbooks();
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
-</section>
-
-<!-- CTA SECTION -->
-<section class="cta-ebooks">
-    <div class="container">
-        <h2>Acesso Ilimitado a Toda a Biblioteca</h2>
-        <p>Subscreve agora e tem acesso a todos os ebooks disponíveis</p>
-        <button class="btn-subscrever">Subscrever por €9.99/mês</button>
     </div>
 </section>
 
