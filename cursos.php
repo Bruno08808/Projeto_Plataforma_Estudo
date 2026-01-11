@@ -45,7 +45,7 @@ if (!empty($pesquisa)) {
                     style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
                 >
                 <button type="submit" style="padding: 12px 30px; background: #E89A3C; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
-                    Procurar
+                🔍 Procurar
                 </button>
                 <?php if (!empty($pesquisa)): ?>
                     <a href="cursos.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
