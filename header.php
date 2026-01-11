@@ -19,6 +19,17 @@ if (session_status() === PHP_SESSION_NONE) {
   gtag('config', 'G-NL0CDQLTQ4');
 </script>
 
+<title><?php echo $seo['title']; ?></title>
+    <meta name="description" content="<?php echo $seo['description']; ?>">
+    <meta name="keywords" content="<?php echo $seo['keywords']; ?>">
+    <meta name="author" content="StudyHub">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonical_url); ?>">
+    
+    <script src="analytics-tracking.js" defer></script>
+    <script src="cookie-consent.js"></script>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? $page_title : 'StudyHub'; ?></title>
