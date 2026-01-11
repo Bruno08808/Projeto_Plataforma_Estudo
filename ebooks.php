@@ -77,7 +77,7 @@ if (!empty($pesquisa)) {
                                 <?php if (isset($_SESSION['user_id'])): ?>
                                     <form method="POST" action="inscrever.php">
                                         <input type="hidden" name="idConteudo" value="<?php echo $ebook['IDconteudo']; ?>">
-                                        <a href="conteudo.php?tipo=ebook&slug=<?= $ebook['IDebook'] ?>" class="btn-ver-mais">
+                                        <a href="conteudo.php?slug=<?= $ebook['Slug'] ?>" class="btn-ver-mais">
     Ver mais
 </a>
                                     </form>

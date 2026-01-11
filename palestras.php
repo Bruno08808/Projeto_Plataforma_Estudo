@@ -92,7 +92,7 @@ if (!empty($pesquisa)) {
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <form method="POST" action="inscrever.php" style="margin-top: 10px;">
                                     <input type="hidden" name="idConteudo" value="<?php echo $palestra['IDconteudo']; ?>">
-                                    <a href="conteudo.php?tipo=palestra&slug=<?= $palestra['IDpalestra'] ?>" class="btn-ver-mais">
+                                    <a href="conteudo.php?slug=<?= $palestra['Slug'] ?>" class="btn-ver-mais">
     Ver mais
 </a>
                                 </form>
