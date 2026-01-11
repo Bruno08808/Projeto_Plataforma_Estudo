@@ -70,10 +70,7 @@ if (!empty($pesquisa)) {
                     <div class="curso-card">
                         <div class="curso-thumbnail">
                             <?php 
-                            // Usa imagens coloridas relacionadas com educação
-                            $imagemSrc = !empty($curso['Imagem']) 
-                                ? htmlspecialchars($curso['Imagem']) 
-                                : 'https://picsum.photos/seed/curso' . ($curso['IDconteudo'] ?? rand(1,100)) . '/400/250';
+                            $imagemSrc = !empty($curso['Imagem']) ? htmlspecialchars($curso['Imagem']) : 'https://via.placeholder.com/400x250';
                             ?>
                             <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($curso['Titulo']); ?>">
                             

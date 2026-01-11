@@ -8,6 +8,17 @@ if (session_status() === PHP_SESSION_NONE) {
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+    
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NL0CDQLTQ4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NL0CDQLTQ4');
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? $page_title : 'StudyHub'; ?></title>
@@ -18,6 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <link rel="stylesheet" href="<?php echo $page_css; ?>">
     <?php endif; ?>
 </head>
+
 <body>
     <!-- navbar que vai aparecer em todas as páginas -->
     <nav class="navbar">
