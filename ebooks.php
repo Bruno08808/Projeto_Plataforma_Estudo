@@ -11,6 +11,13 @@ $pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
 // Buscar ebooks (com ou sem filtro)
 if (!empty($pesquisa)) {
     $ebooks = pesquisarEbooks($pesquisa);
+    
+    // Encaminha o percurso do utilizador desde a pesquisa até ao Analytics
+    echo "<script>
+        if (typeof StudyHubTracking !== 'undefined') {
+            StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Ebooks', " . count($ebooks) . ");
+        }
+    </script>";
 } else {
     $ebooks = getTodosEbooks();
 }
@@ -70,14 +77,24 @@ if (!empty($pesquisa)) {
                     <div class="ebook-card">
                         <div class="ebook-cover">
                             <?php 
-                            $imagemSrc = !empty($ebook['Imagem']) ? htmlspecialchars($ebook['Imagem']) : 'https://via.placeholder.com/300x400';
+                            // Cria capas coloridas para ebooks
+                            $cores = ['5FA777', '4A90E2', 'E89A3C', 'D96459', '9B59B6'];
+                            $corIndex = ($ebook['IDconteudo'] ?? 0) % count($cores);
+                            $cor = $cores[$corIndex];
+                            $tituloEncoded = urlencode(substr($ebook['Titulo'], 0, 30));
+                            
+                            $imagemSrc = !empty($ebook['Imagem']) 
+                                ? htmlspecialchars($ebook['Imagem']) 
+                                : "https://via.placeholder.com/300x400/{$cor}/ffffff?text={$tituloEncoded}";
                             ?>
                             <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($ebook['Titulo']); ?>">
                             <div class="ebook-overlay">
                                 <?php if (isset($_SESSION['user_id'])): ?>
                                     <form method="POST" action="inscrever.php">
                                         <input type="hidden" name="idConteudo" value="<?php echo $ebook['IDconteudo']; ?>">
-                                        <a href="conteudo.php?slug=<?= $ebook['Slug'] ?>" class="btn-ver-mais">
+                                        <a href="conteudo.php?slug=<?= $ebook['Slug'] ?>" 
+                                           class="btn-ver-mais"
+                                           onclick="StudyHubTracking.trackVerMais('Ebook', '<?php echo addslashes($ebook['Titulo']); ?>', '<?php echo $ebook['IDconteudo']; ?>');">
     Ver mais
 </a>
                                     </form>

@@ -11,6 +11,13 @@ $pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
 // Buscar palestras (com ou sem filtro)
 if (!empty($pesquisa)) {
     $palestras = pesquisarPalestras($pesquisa);
+    
+    // Rastrear pesquisa no Analytics
+    echo "<script>
+        if (typeof StudyHubTracking !== 'undefined') {
+            StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Palestras', " . count($palestras) . ");
+        }
+    </script>";
 } else {
     $palestras = getTodasPalestras();
 }
@@ -70,7 +77,10 @@ if (!empty($pesquisa)) {
                     <div class="palestra-card">
                         <div class="palestra-thumb">
                             <?php 
-                            $imagemSrc = !empty($palestra['Imagem']) ? htmlspecialchars($palestra['Imagem']) : 'https://via.placeholder.com/400x225';
+                            // Usa imagens relacionadas com eventos e apresentações
+                            $imagemSrc = !empty($palestra['Imagem']) 
+                                ? htmlspecialchars($palestra['Imagem']) 
+                                : 'https://picsum.photos/seed/palestra' . ($palestra['IDconteudo'] ?? rand(1,100)) . '/400/225';
                             ?>
                             <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($palestra['Titulo']); ?>">
                             <div class="play-overlay">▶</div>
@@ -92,7 +102,9 @@ if (!empty($pesquisa)) {
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <form method="POST" action="inscrever.php" style="margin-top: 10px;">
                                     <input type="hidden" name="idConteudo" value="<?php echo $palestra['IDconteudo']; ?>">
-                                    <a href="conteudo.php?slug=<?= $palestra['Slug'] ?>" class="btn-ver-mais">
+                                    <a href="conteudo.php?slug=<?= $palestra['Slug'] ?>" 
+                                       class="btn-ver-mais"
+                                       onclick="StudyHubTracking.trackVerMais('Palestra', '<?php echo addslashes($palestra['Titulo']); ?>', '<?php echo $palestra['IDconteudo']; ?>');">
     Ver mais
 </a>
                                 </form>

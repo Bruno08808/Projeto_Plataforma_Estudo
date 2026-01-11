@@ -11,6 +11,13 @@ $pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
 // Buscar explicações (com ou sem filtro)
 if (!empty($pesquisa)) {
     $explicacoes = pesquisarExplicacoes($pesquisa);
+    
+    // Rastrear pesquisa no Analytics
+    echo "<script>
+        if (typeof StudyHubTracking !== 'undefined') {
+            StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Explicacoes', " . count($explicacoes) . ");
+        }
+    </script>";
 } else {
     $explicacoes = getTodasExplicacoes();
 }
@@ -70,7 +77,10 @@ if (!empty($pesquisa)) {
                     <div class="explicador-card">
                         <div class="explicador-photo">
                             <?php 
-                            $imagemSrc = !empty($explicacao['Imagem']) ? htmlspecialchars($explicacao['Imagem']) : 'https://via.placeholder.com/150';
+                            // Se não tiver imagem, usa um avatar aleatório mas consistente
+                            $imagemSrc = !empty($explicacao['Imagem']) 
+                                ? htmlspecialchars($explicacao['Imagem']) 
+                                : 'https://i.pravatar.cc/150?img=' . (($explicacao['IDconteudo'] ?? 1) % 70 + 1);
                             ?>
                             <img src="<?php echo $imagemSrc; ?>" alt="Professor">
                             <?php if ($explicacao['Disponibilidade'] == 1): ?>
@@ -103,7 +113,9 @@ if (!empty($pesquisa)) {
                                     <?php if (isset($_SESSION['user_id'])): ?>
                                         <form method="POST" action="inscrever.php" style="margin: 0;">
                                             <input type="hidden" name="idConteudo" value="<?php echo $explicacao['IDconteudo']; ?>">
-                                            <a href="conteudo.php?slug=<?= $explicacao['Slug'] ?>" class="btn-ver-mais">Ver mais</a>
+                                            <a href="conteudo.php?slug=<?= $explicacao['Slug'] ?>" 
+                                               class="btn-ver-mais"
+                                               onclick="StudyHubTracking.trackVerMais('Explicacao', '<?php echo addslashes($explicacao['Titulo']); ?>', '<?php echo $explicacao['IDconteudo']; ?>');">Ver mais</a>
                                         </form>
                                     <?php else: ?>
                                         <a href="login.php" class="btn-agendar" style="display: inline-block; text-decoration: none; padding: 8px 16px;">Login</a>
