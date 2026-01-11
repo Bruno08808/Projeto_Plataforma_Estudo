@@ -3,6 +3,13 @@ $page_title = "StudyHub - Cursos";
 $page_css = "cursos.css";
 session_start();
 include 'model.php';
+
+// Breadcrumbs
+$breadcrumbs = [
+    ['name' => 'Início', 'url' => 'index.php'],
+    ['name' => 'Cursos', 'url' => '']
+];
+
 include 'header.php';
 
 // Sistema de pesquisa
@@ -11,6 +18,13 @@ $pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
 // Buscar cursos (com ou sem filtro)
 if (!empty($pesquisa)) {
     $cursos = pesquisarCursos($pesquisa);
+    
+    // Rastrear pesquisa no Analytics
+    echo "<script>
+        if (typeof StudyHubTracking !== 'undefined') {
+            StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Cursos', " . count($cursos) . ");
+        }
+    </script>";
 } else {
     $cursos = getTodosCursos();
 }
@@ -31,11 +45,11 @@ if (!empty($pesquisa)) {
                     style="flex: 1; padding: 12px 20px; border: none; border-radius: 25px; font-size: 16px;"
                 >
                 <button type="submit" style="padding: 12px 30px; background: #E89A3C; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
-                    🔍 Procurar
+                    Procurar
                 </button>
                 <?php if (!empty($pesquisa)): ?>
                     <a href="cursos.php" style="padding: 12px 20px; background: #666; color: white; border-radius: 25px; text-decoration: none; display: inline-block;">
-                        ✕ Limpar
+                    ✕ Limpar
                     </a>
                 <?php endif; ?>
             </form>
@@ -65,14 +79,21 @@ if (!empty($pesquisa)) {
                 </p>
             </div>
         <?php else: ?>
-            <div class="cursos-grid">
-                <?php foreach ($cursos as $curso): ?>
-                    <div class="curso-card">
+            <div class="cursos-grid" itemscope itemtype="https://schema.org/ItemList">
+                <?php foreach ($cursos as $index => $curso): ?>
+                    <div class="curso-card" itemprop="itemListElement" itemscope itemtype="https://schema.org/Course">
+                        <meta itemprop="position" content="<?php echo $index + 1; ?>">
                         <div class="curso-thumbnail">
                             <?php 
-                            $imagemSrc = !empty($curso['Imagem']) ? htmlspecialchars($curso['Imagem']) : 'https://via.placeholder.com/400x250';
+                            // Usa imagens coloridas relacionadas com educação
+                            $imagemSrc = !empty($curso['Imagem']) 
+                                ? htmlspecialchars($curso['Imagem']) 
+                                : 'https://picsum.photos/seed/curso' . ($curso['IDconteudo'] ?? rand(1,100)) . '/400/250';
                             ?>
-                            <img src="<?php echo $imagemSrc; ?>" alt="<?php echo htmlspecialchars($curso['Titulo']); ?>">
+                            <img src="<?php echo $imagemSrc; ?>" 
+                                 alt="Curso de <?php echo htmlspecialchars($curso['Titulo']); ?> - StudyHub" 
+                                 itemprop="image"
+                                 loading="lazy">
                             
                             <?php if ($curso['Disponibilidade'] == 1): ?>
                                 <span class="badge-novo">Disponível</span>
@@ -80,30 +101,37 @@ if (!empty($pesquisa)) {
                         </div>
                         <div class="curso-content">
                             <div class="curso-categoria">Curso</div>
-                            <h3><?php echo htmlspecialchars($curso['Titulo']); ?></h3>
+                            <h3 itemprop="name"><?php echo htmlspecialchars($curso['Titulo']); ?></h3>
                             
                             <?php if (!empty($curso['Info_Extra'])): ?>
-                                <p><?php echo htmlspecialchars(mb_substr($curso['Info_Extra'], 0, 100)); ?>...</p>
+                                <p itemprop="description"><?php echo htmlspecialchars(mb_substr($curso['Info_Extra'], 0, 100)); ?>...</p>
                             <?php endif; ?>
                             
                             <?php if (!empty($curso['Avaliacao'])): ?>
-                                <div class="curso-stats">
-                                    <span>⭐ <?php echo htmlspecialchars($curso['Avaliacao']); ?>/5</span>
+                                <div class="curso-stats" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                                    <span>⭐ <span itemprop="ratingValue"><?php echo htmlspecialchars($curso['Avaliacao']); ?></span>/5</span>
+                                    <meta itemprop="ratingCount" content="1">
                                 </div>
                             <?php endif; ?>
                             
-                            <div class="curso-footer">
+                            <div class="curso-footer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                                <meta itemprop="priceCurrency" content="EUR">
                                 <?php if (!empty($curso['Preco']) && $curso['Preco'] > 0): ?>
-                                    <div class="preco">€<?php echo number_format($curso['Preco'], 2, ',', '.'); ?></div>
+                                    <div class="preco" itemprop="price" content="<?php echo $curso['Preco']; ?>">€<?php echo number_format($curso['Preco'], 2, ',', '.'); ?></div>
                                 <?php else: ?>
-                                    <div class="preco" style="color: #5FA777; font-weight: bold;">Gratuito</div>
+                                    <div class="preco" style="color: #5FA777; font-weight: bold;" itemprop="price" content="0">Gratuito</div>
                                 <?php endif; ?>
+                                <meta itemprop="availability" content="https://schema.org/InStock">
                             </div>
                             
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <form method="POST" action="inscrever.php" style="margin: 0;">
                                     <input type="hidden" name="idConteudo" value="<?php echo $curso['IDconteudo']; ?>">
-                                    <a href="conteudo.php?slug=<?= $curso['Slug'] ?>" class="btn-ver-mais"> Ver mais</a>
+                                    <a href="conteudo.php?slug=<?= $curso['Slug'] ?>" 
+                                       class="btn-ver-mais"
+                                       itemprop="url"
+                                       onclick="StudyHubTracking.trackVerMais('Curso', '<?php echo addslashes($curso['Titulo']); ?>', '<?php echo $curso['IDconteudo']; ?>');"
+                                       aria-label="Ver detalhes do curso <?php echo htmlspecialchars($curso['Titulo']); ?>"> Ver mais</a>
                                 </form>
                             <?php else: ?>
                                 <a href="login.php" class="btn-inscrever" style="display: block; text-align: center; text-decoration: none;">Fazer Login para Inscrever</a>
@@ -122,22 +150,22 @@ if (!empty($pesquisa)) {
         <h2>Porquê Escolher os Nossos Cursos?</h2>
         <div class="beneficios-grid">
             <div class="beneficio">
-                <div class="beneficio-icon">📜</div>
+                <div class="beneficio-icon"></div>
                 <h3>Certificado</h3>
                 <p>Recebe um certificado reconhecido ao completar</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon">♾️</div>
+                <div class="beneficio-icon"></div>
                 <h3>Acesso Vitalício</h3>
                 <p>Acesso ilimitado ao conteúdo para sempre</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon">💬</div>
+                <div class="beneficio-icon"></div>
                 <h3>Suporte</h3>
                 <p>Tira dúvidas diretamente com o instrutor</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon">📱</div>
+                <div class="beneficio-icon"></div>
                 <h3>Mobile</h3>
                 <p>Aprende onde e quando quiseres</p>
             </div>
