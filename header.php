@@ -9,15 +9,13 @@ if (session_status() === PHP_SESSION_NONE) {
 <html lang="pt">
 <head>
     
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NL0CDQLTQ4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NL0CDQLTQ4');
-</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MWJCTLHP');</script>
+<!-- End Google Tag Manager -->
 
 <title><?php echo $seo['title']; ?></title>
     <meta name="description" content="<?php echo $seo['description']; ?>">
@@ -28,6 +26,10 @@ if (session_status() === PHP_SESSION_NONE) {
     
     <script src="analytics-tracking.js" defer></script>
     <script src="cookie-consent.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://i.pravatar.cc">
+    <link rel="preconnect" href="https://picsum.photos">
 
 
     <meta charset="UTF-8">
@@ -42,6 +44,12 @@ if (session_status() === PHP_SESSION_NONE) {
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MWJCTLHP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
     <!-- navbar que vai aparecer em todas as páginas -->
     <nav class="navbar">
         <div class="nav-container">
