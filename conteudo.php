@@ -1,7 +1,21 @@
 <?php
-require_once 'model.php';
-require_once 'seo_config.php';
 session_start();
+
+// Incluir arquivos necessários
+require_once 'model.php';
+
+// Verificar se seo_config existe antes de incluir
+if (file_exists('seo_config.php')) {
+    require_once 'seo_config.php';
+} else {
+    // Fallback: definir constantes básicas se seo_config não existir
+    if (!defined('SITE_URL')) {
+        define('SITE_URL', 'https://www.studyhub.pt');
+    }
+    if (!defined('SITE_NAME')) {
+        define('SITE_NAME', 'StudyHub');
+    }
+}
 
 $slug = $_GET['slug'] ?? null;
 
@@ -28,27 +42,64 @@ $meta_description = $conteudo['Info_Extra'] ?
     substr(strip_tags($conteudo['Info_Extra']), 0, 155) . "..." :
     $tipo_formatado . " de " . $conteudo['Titulo'] . " na StudyHub. Aprende online ao teu ritmo em Santarém, Portugal.";
 
+// URL base para imagens
+$site_url = defined('SITE_URL') ? SITE_URL : 'https://www.studyhub.pt';
+
 $page_seo = [
     'title' => $page_title,
     'description' => $meta_description,
     'keywords' => $conteudo['Titulo'] . ', ' . strtolower($tipo_formatado) . ' online, formação online, ' . strtolower($tipo_formatado) . ' portugal',
-    'image' => !empty($conteudo['Imagem']) ? $conteudo['Imagem'] : SITE_URL . '/assets/images/og-default.jpg',
+    'image' => !empty($conteudo['Imagem']) ? $conteudo['Imagem'] : $site_url . '/assets/images/og-default.jpg',
 ];
 
 // ==================== BREADCRUMBS ====================
 $breadcrumbs = [
-    ['name' => 'Início', 'url' => SITE_URL . '/index.php'],
-    ['name' => $tipo_formatado . 's', 'url' => SITE_URL . '/' . strtolower($conteudo['Tipo']) . 's.php'],
+    ['name' => 'Início', 'url' => $site_url . '/index.php'],
+    ['name' => $tipo_formatado . 's', 'url' => $site_url . '/' . strtolower($conteudo['Tipo']) . 's.php'],
     ['name' => $conteudo['Titulo'], 'url' => '']
 ];
 
 // ==================== SCHEMA.ORG MARKUP ====================
-if ($conteudo['Tipo'] == 'Curso') {
+$schema_markup = null;
+
+// Verificar se as funções existem antes de chamar
+if ($conteudo['Tipo'] == 'Curso' && function_exists('getCursoSchema')) {
     $schema_markup = getCursoSchema($conteudo);
-} elseif ($conteudo['Tipo'] == 'Ebook') {
+} elseif ($conteudo['Tipo'] == 'Ebook' && function_exists('getEbookSchema')) {
     $schema_markup = getEbookSchema($conteudo);
-} elseif ($conteudo['Tipo'] == 'Palestra') {
+} elseif ($conteudo['Tipo'] == 'Palestra' && function_exists('getPalestraSchema')) {
     $schema_markup = getPalestraSchema($conteudo);
+} else {
+    // Fallback: criar schema básico inline
+    if ($conteudo['Tipo'] == 'Curso') {
+        $schema_markup = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Course',
+            'name' => $conteudo['Titulo'],
+            'description' => $conteudo['Info_Extra'] ?? '',
+            'provider' => [
+                '@type' => 'Organization',
+                'name' => 'StudyHub',
+                'url' => $site_url,
+            ],
+        ];
+    } elseif ($conteudo['Tipo'] == 'Ebook') {
+        $schema_markup = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Book',
+            'name' => $conteudo['Titulo'],
+            'description' => $conteudo['Info_Extra'] ?? '',
+            'bookFormat' => 'EBook',
+            'inLanguage' => 'pt-PT',
+        ];
+    } elseif ($conteudo['Tipo'] == 'Palestra') {
+        $schema_markup = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Event',
+            'name' => $conteudo['Titulo'],
+            'description' => $conteudo['Info_Extra'] ?? '',
+        ];
+    }
 }
 
 include 'header.php';
@@ -169,7 +220,7 @@ include 'header.php';
             <!-- ==================== PREÇO E BOTÃO DE AÇÃO ==================== -->
             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                 <meta itemprop="priceCurrency" content="EUR">
-                <meta itemprop="url" content="<?= SITE_URL ?>/conteudo.php?slug=<?= $slug ?>">
+                <meta itemprop="url" content="<?= $site_url ?>/conteudo.php?slug=<?= $slug ?>">
                 <meta itemprop="availability" content="https://schema.org/<?= ($conteudo['Disponibilidade'] == 1) ? 'InStock' : 'OutOfStock' ?>">
                 
                 <h3 style="color: #E89A3C; font-size: 2em; margin: 0;" itemprop="price" content="<?= $conteudo['Preco'] ?>">
