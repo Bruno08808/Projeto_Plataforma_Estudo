@@ -21,9 +21,11 @@ if (!empty($pesquisa)) {
     
     // Rastrear pesquisa no Analytics
     echo "<script>
-        if (typeof StudyHubTracking !== 'undefined') {
-            StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Cursos', " . count($cursos) . ");
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof StudyHubTracking !== 'undefined') {
+                StudyHubTracking.trackPesquisa('" . addslashes($pesquisa) . "', 'Cursos', " . count($cursos) . ");
+            }
+        });
     </script>";
 } else {
     $cursos = getTodosCursos();
@@ -125,14 +127,13 @@ if (!empty($pesquisa)) {
                             </div>
                             
                             <?php if (isset($_SESSION['user_id'])): ?>
-                                <form method="POST" action="inscrever.php" style="margin: 0;">
-                                    <input type="hidden" name="idConteudo" value="<?php echo $curso['IDconteudo']; ?>">
-                                    <a href="conteudo.php?slug=<?= $curso['Slug'] ?>" 
-                                       class="btn-ver-mais"
-                                       itemprop="url"
-                                       onclick="StudyHubTracking.trackVerMais('Curso', '<?php echo addslashes($curso['Titulo']); ?>', '<?php echo $curso['IDconteudo']; ?>');"
-                                       aria-label="Ver detalhes do curso <?php echo htmlspecialchars($curso['Titulo']); ?>"> Ver mais</a>
-                                </form>
+                                <a href="conteudo.php?slug=<?php echo urlencode($curso['Slug']); ?>" 
+                                   class="btn-ver-mais"
+                                   itemprop="url"
+                                   onclick="if(typeof StudyHubTracking !== 'undefined') { StudyHubTracking.trackVerMais('Curso', '<?php echo addslashes($curso['Titulo']); ?>', '<?php echo $curso['IDconteudo']; ?>'); }"
+                                   aria-label="Ver detalhes do curso <?php echo htmlspecialchars($curso['Titulo']); ?>">
+                                    Ver mais
+                                </a>
                             <?php else: ?>
                                 <a href="login.php" class="btn-inscrever" style="display: block; text-align: center; text-decoration: none;">Fazer Login para Inscrever</a>
                             <?php endif; ?>
@@ -150,22 +151,22 @@ if (!empty($pesquisa)) {
         <h2>Porquê Escolher os Nossos Cursos?</h2>
         <div class="beneficios-grid">
             <div class="beneficio">
-                <div class="beneficio-icon"></div>
+                <div class="beneficio-icon">🎓</div>
                 <h3>Certificado</h3>
                 <p>Recebe um certificado reconhecido ao completar</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon"></div>
+                <div class="beneficio-icon">♾️</div>
                 <h3>Acesso Vitalício</h3>
                 <p>Acesso ilimitado ao conteúdo para sempre</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon"></div>
+                <div class="beneficio-icon">💬</div>
                 <h3>Suporte</h3>
                 <p>Tira dúvidas diretamente com o instrutor</p>
             </div>
             <div class="beneficio">
-                <div class="beneficio-icon"></div>
+                <div class="beneficio-icon">📱</div>
                 <h3>Mobile</h3>
                 <p>Aprende onde e quando quiseres</p>
             </div>

@@ -70,12 +70,6 @@ $canonical_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_U
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     
-    <!-- ==================== ANALYTICS TRACKING ==================== -->
-    <script src="analytics-tracking.js" defer></script>
-    
-    <!-- ==================== COOKIE CONSENT (GDPR/LGPD) ==================== -->
-    <script src="cookie-consent.js"></script>
-    
     <!-- ==================== PRECONNECT PARA PERFORMANCE ==================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://i.pravatar.cc">
@@ -83,9 +77,13 @@ $canonical_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_U
     
     <!-- ==================== CSS ==================== -->
     <link rel="stylesheet" href="style.css">
-    <?php if(isset($page_css)): ?>
+    <?php if(isset($page_css) && !empty($page_css)): ?>
         <link rel="stylesheet" href="<?php echo $page_css; ?>">
     <?php endif; ?>
+    
+    <!-- ==================== ANALYTICS & COOKIES ==================== -->
+    <script src="analytics-tracking.js" defer></script>
+    <script src="cookie-consent.js" defer></script>
     
     <!-- ==================== SCHEMA.ORG - ORGANIZATION ==================== -->
     <?php if (function_exists('getOrganizationSchema')): ?>

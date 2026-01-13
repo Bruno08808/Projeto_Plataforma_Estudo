@@ -196,7 +196,7 @@ include 'header.php';
                     <p style="margin: 8px 0;"><strong>⏰ Data:</strong> <time itemprop="startDate" datetime="<?= $conteudo['Data_Evento'] ?>"><?= date('d/m/Y H:i', strtotime($conteudo['Data_Evento'])) ?></time></p>
                     <?php endif; ?>
                     
-                <?php elseif (in_array($conteudo['Tipo'], ['Explicacoes', 'Explicação', 'Explicacao'])): ?>
+                <?php else: // Explicações ?>
                     <?php if (!empty($conteudo['Nivel'])): ?>
                     <p style="margin: 8px 0;"><strong>🎓 Nível:</strong> <?= htmlspecialchars($conteudo['Nivel']) ?></p>
                     <?php endif; ?>
@@ -266,7 +266,7 @@ include 'header.php';
                                 StudyHubTracking.trackDownloadEbook(id, titulo, preco);
                             } else if (tipo === 'Palestra') {
                                 StudyHubTracking.trackReservaPalestra(id, titulo, preco);
-                            } else if (tipo.includes('Explica')) {
+                            } else {
                                 StudyHubTracking.trackAgendamentoExplicacao(id, titulo, preco);
                             }
                         }
@@ -308,7 +308,7 @@ include 'header.php';
     <?php endif; ?>
     
     <!-- ==================== FAQ SCHEMA (SE APLICÁVEL) ==================== -->
-    <?php if ($conteudo['Tipo'] == 'Curso' || $conteudo['Tipo'] == 'Explicacoes'): ?>
+    <?php if ($conteudo['Tipo'] == 'Curso' || in_array($conteudo['Tipo'], ['Explicacoes', 'Explicação'])): ?>
     <section style="margin-top: 60px; max-width: 800px;" itemscope itemtype="https://schema.org/FAQPage">
         <h2 style="color: #2c3e50; margin-bottom: 20px;">Perguntas Frequentes</h2>
         
